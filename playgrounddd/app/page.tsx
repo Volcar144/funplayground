@@ -2,8 +2,8 @@
 
 import Image from "next/image";
 import Loading from "../components/loading"
-import { Button, Input, Surface, Text, PoweredByCloudflare, ClipboardText, SensitiveInput, Toasty, useKumoToastManager } from "@cloudflare/kumo";
-import { TrashIcon, EnvelopeOpenIcon, CrossIcon } from "@phosphor-icons/react"
+import { Button, Input, Surface, Text, PoweredByCloudflare, ClipboardText, SensitiveInput, Toasty, useKumoToastManager, Tooltip, TooltipProvider } from "@cloudflare/kumo";
+import { TrashIcon, EnvelopeOpenIcon, CrossIcon, CopyrightIcon } from "@phosphor-icons/react"
 import { Suspense } from "react";
 import React from "react";
 
@@ -48,7 +48,7 @@ export default function Home() {
 
             <p>This data has been fetched: {foo || <Loading></Loading>}</p>
             
-            <div className="flex gap-2"> 
+            <div className="flex gap-10"> 
               <p>And you can copy it! </p>
               <ClipboardText text={foo || " Loading"} />
             </div>
@@ -56,7 +56,7 @@ export default function Home() {
                 This is a clipboard component, click to copy the fetched data!
             </Text>
             <p>Then paste in here!</p>
-            <Input placeholder="Paste here" />
+            <Input placeholder="Paste here" aria-label="Paste"/>
             <p>Now for some wow effect, type your name below!</p>
             <SensitiveInput
               label="Name"
@@ -66,13 +66,17 @@ export default function Home() {
             <p>Press this button to tell you what your name is in a toast!</p>
             <Button onClick={onNameButtonClick} variant="primary" icon={<EnvelopeOpenIcon />}>A toast to {name}!</Button>
             <Button variant="destructive" onClick={() => {window.location.href="/404"}} icon={<CrossIcon/>}> Press on this button to go to my amazing 404 page!</Button>
+            <Button variant="secondary" onClick={() => {window.location.href="/other"}}>Go to other</Button>
             </div>
           </main>
         </div>
         <footer>
-          <>
-            <PoweredByCloudflare />
-          </>
+          
+          <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
+             <PoweredByCloudflare /> <CopyrightIcon size={16} /><p className="text-black-50">2026 DanngDev</p>
+          </div>
+          
+          
         </footer>
       </Suspense>
     </>

@@ -28,11 +28,9 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-      <TooltipProvider>
-        <Toasty>
-          {children}
-        </Toasty>
-      </TooltipProvider>
+      <Toasty>
+        {children}
+      </Toasty>
       </body>
     </html>
   );
