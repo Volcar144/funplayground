@@ -5,6 +5,7 @@ import Loading from "../components/loading"
 import { Button, Input, Surface, Text, PoweredByCloudflare, ClipboardText, SensitiveInput, Toasty, useKumoToastManager, Tooltip, TooltipProvider } from "@cloudflare/kumo";
 import { TrashIcon, EnvelopeOpenIcon, CrossIcon, CopyrightIcon } from "@phosphor-icons/react"
 import { Suspense } from "react";
+import ThemeToggle from "@/components/ThemeToggle";
 import React from "react";
 
 
@@ -35,6 +36,9 @@ export default function Home() {
       <Suspense fallback={<Loading />}>
         <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
           <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
+            <div className="flex flex-col items-right align-top">
+              <ThemeToggle />
+            </div>
             <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
             <Surface className="p-6 rounded-lg">
               <Text size="lg" weight="semibold">Surface Component</Text>
