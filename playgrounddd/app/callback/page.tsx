@@ -3,25 +3,24 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Loader } from "@cloudflare/kumo";
 import { authClient } from "@/lib/auth-client";
-import { useState } from "react";
-import { waitForDebugger } from "inspector";
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
+
 
 
 export default function CallbackPage(){
-    const useSession = authClient.useSession;
-    const [isAuthorized, setIsAuthorized] = useState(true)
+    const { data: session, isPending } = authClient.useSession();
+    const router = useRouter();
 
-    if(!authClient.useSession){
-        setIsAuthorized(false);
-    }
+    useEffect(() => {
+        if (isPending) return;
 
-    setTimeout("2000");
-
-    if(isAuthorized){
-        window.location.href="/home"
-    } else {
-        window.location.href="/signin"
-    }
+        if (session) {
+            router.push("/home");
+        } else {
+            router.push("/signin");
+        }
+    }, [isPending, session, router]);
 
 
 

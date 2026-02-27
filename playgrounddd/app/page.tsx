@@ -41,8 +41,8 @@ export default function Home() {
             </div>
             <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
             <Surface className="p-6 rounded-lg">
-              <Text size="lg" weight="semibold">Surface Component</Text>
-              <Text variant="secondary" className="mt-2">
+              <Text size="lg" >Surface Component</Text>
+              <Text variant="secondary" >
                 A container with consistent elevation and border styling.
               </Text>
             </Surface>
@@ -56,7 +56,7 @@ export default function Home() {
               <p>And you can copy it! </p>
               <ClipboardText text={foo || " Loading"} />
             </div>
-            <Text variant="secondary" className="mt-2">
+            <Text variant="secondary" >
                 This is a clipboard component, click to copy the fetched data!
             </Text>
             <p>Then paste in here!</p>
