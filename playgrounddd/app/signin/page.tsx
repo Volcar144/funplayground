@@ -66,7 +66,7 @@ export default function SignInPage(){
             email: email,
             password: password,
             rememberMe: rememeberMe,
-            callbackURL: "https://sturdy-space-engine-v6677xq7gw99fx6j4-3000.app.github.dev/callback"
+            callbackURL: `${process.env.BETTER_AUTH_URL}/callback`
         },
         {
             onRequest: (ctx) => {
