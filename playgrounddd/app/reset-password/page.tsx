@@ -1,3 +1,5 @@
+"use client"
+
 import { Card, CardAction, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button, Input } from "@cloudflare/kumo";
 import { useEffect, useState } from "react";

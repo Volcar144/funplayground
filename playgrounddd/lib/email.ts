@@ -1,8 +1,8 @@
 
 
-const nodemailer = require("nodemailer");
+import nodemailer from "nodemailer";
 
-var transport = nodemailer.createTransport({
+const transport = nodemailer.createTransport({
   host: "live.smtp.mailtrap.io",
   port: 587,
   auth: {
@@ -16,9 +16,9 @@ interface User {
     [key: string]: any;
 }
 
-export function sendEmailVerification(email: string, url: string, token: string): void {
+export async function sendEmailVerification(email: string, url: string, token: string)  {
     try {
-        const info = transport.sendMail({
+        const info = await transport.sendMail({
             from: '"DanngDev Playground" <noreply@archiem.top>',
             to: email,
             subject:"Verify your email",
@@ -47,9 +47,6 @@ export function sendEmailVerification(email: string, url: string, token: string)
                         <span style="word-break: break-all; color: #667eea;">${url}</span>
                     </p>
                     
-                    <p style="color: #999; font-size: 12px; margin-top: 20px;">
-                        Token: <code style="background-color: #f0f0f0; padding: 2px 6px; border-radius: 3px;">${token}</code>
-                    </p>
                     
                 </div>
                 <a href="__unsubscribe_url__">Unsubscribe?</a>
@@ -61,9 +58,7 @@ export function sendEmailVerification(email: string, url: string, token: string)
 
             Please verify your email address by clicking the link below. This link will expire in 24 hours.
 
-            Verify Email: ${url}
-
-            Token: ${token}`
+            Verify Email: ${url}`
             
         });
     } catch (err){
@@ -72,9 +67,9 @@ export function sendEmailVerification(email: string, url: string, token: string)
 
 }
 
-export function sendPasswordReset(email: string, url: string, token: string){
+export async function sendPasswordReset(email: string, url: string, token: string): Promise<void> {
     try {
-        const info = transport.sendMail({
+        const info = await transport.sendMail({
             from: '"DanngDev Playground" <noreply@archiem.top>',
             to: email,
             subject: "Reset your password",
@@ -101,10 +96,7 @@ export function sendPasswordReset(email: string, url: string, token: string){
                     If the button doesn't work, copy and paste this link in your browser:<br>
                     <span style="word-break: break-all; color: #667eea;">${url}</span>
                 </p>
-                
-                <p style="color: #999; font-size: 12px; margin-top: 20px;">
-                    Token: <code style="background-color: #f0f0f0; padding: 2px 6px; border-radius: 3px;">${token}</code>
-                </p>
+            
                 
                 <p style="color: #e74c3c; font-size: 12px; margin-top: 20px;">
                     If you didn't request a password reset, please ignore this email or contact support.
@@ -121,8 +113,6 @@ export function sendPasswordReset(email: string, url: string, token: string){
 
     Reset Password: ${url}
 
-    Token: ${token}
-
     If the button doesn't work, copy and paste this link in your browser:
     ${url}
 
@@ -133,8 +123,8 @@ export function sendPasswordReset(email: string, url: string, token: string){
     }
 }
 
-export function sendOnPasswordReset(email: string){
-    const info = transport.sendMail({
+export async function sendOnPasswordReset(email: string): Promise<void> {
+    const info = await transport.sendMail({
             from: '"DanngDev Playground" <noreply@archiem.top>',
             to: email,
             subject: "Reset your password",

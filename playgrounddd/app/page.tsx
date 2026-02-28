@@ -24,10 +24,20 @@ export default function Home() {
 
   React.useEffect(() => {
     fetch("https://dummyjson.com/c/3029-d29f-4014-9fb4")
-      .then(res => res.json())
+      .then(res => {
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        return res.json();
+      })
       .then(data => setFoo(JSON.stringify(data)))
-      .catch(err => console.error(err));
-  }, []);
+      .catch(err => {
+        console.error("Failed to fetch data:", err);
+        toastManager.add({
+          title: "Error",
+          description: "Failed to load data",
+          variant: "error"
+        });
+      });
+  }, [toastManager]);
 
 
   return (
