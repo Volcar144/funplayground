@@ -2,7 +2,8 @@ import { betterAuth } from "better-auth";
 import {Pool} from "pg"
 import { haveIBeenPwned } from "better-auth/plugins"
 import { nextCookies } from "better-auth/next-js";
-import { sendEmailVerification } from "./email";
+import { sendEmailVerification, sendOnPasswordReset, sendPasswordReset } from "./email";
+import { User } from "lucide-react";
 
 export const auth = betterAuth({
     database: new Pool({
@@ -16,6 +17,12 @@ export const auth = betterAuth({
     emailAndPassword:{
         enabled:true,
         requireEmailVerification: true,
+        sendResetPassword: async ({user, url, token}, request) => {
+            sendPasswordReset(user.email, url, token);
+        },
+        onPasswordReset: async ({ user }, request) => {
+            sendOnPasswordReset(user.email);
+        },
     },
     plugins:[
         haveIBeenPwned(),
