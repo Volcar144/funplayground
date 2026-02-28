@@ -11,12 +11,18 @@ import { CheckCheckIcon } from "lucide-react";
 import { router } from "better-auth/api";
 import { useRouter } from "next/navigation";
 
+
 export default function ResetPasswordPage() {
 
     const router = useRouter();
-
-    const token = new URLSearchParams(window.location.search).get("token");
-    const errorP = new URLSearchParams(window.location.search).get("error");
+    const [token, setToken] = useState<string | null>(null);
+    const [errorP, setErrorP] = useState<string | null>(null);
+    
+    useEffect(() => {
+        const params = new URLSearchParams(window.location.search);
+        setToken(params.get("token"));
+        setErrorP(params.get("error"));
+    }, []);
 
     const [loading, setLoading] = useState(false);
     const [email, setEmail] = useState("");
@@ -121,6 +127,12 @@ export default function ResetPasswordPage() {
 
         setLoading(true);
         setError("");
+
+        if (!token) {
+            setError("Missing or invalid token");
+            setLoading(false);
+            return;
+        }
 
         const { data,error } = await authClient.resetPassword({
             token: `${token}`,
