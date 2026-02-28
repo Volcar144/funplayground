@@ -68,7 +68,7 @@ export default function SignInPage(){
             name: name,
             email: email,
             password: password,
-            callbackURL: `${process.env.BETTER_AUTH_URL}/callback`
+            callbackURL: `https://danng-devpg11.vercel.app/callback`
         },
         {
             onRequest: (ctx) => {
