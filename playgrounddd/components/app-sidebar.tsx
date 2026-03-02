@@ -1,3 +1,6 @@
+"use client"
+
+import { useEffect, useState } from "react"
 import {
   Sidebar,
   SidebarContent,
@@ -5,26 +8,39 @@ import {
   SidebarGroup,
   SidebarHeader,
 } from "@/components/ui/sidebar"
-import { User } from "lucide-react"
 import { authClient } from "@/lib/auth-client"
-import { UserCircleIcon, UserIcon, WarningOctagonIcon } from "@phosphor-icons/react";
+import { UserCircleIcon, WarningOctagonIcon } from "@phosphor-icons/react";
 
-export async function AppSidebar() {
-  const { data: session, error } = await authClient.getSession()
+export function AppSidebar() {
+  const [session, setSession] = useState<any>(null)
+  // the auth client returns an object with status/statusText/code/message
+  type SessionError = {
+    code?: string
+    message?: string
+    status: number
+    statusText: string
+  } | null
+  const [error, setError] = useState<SessionError>(null)
 
-  if(error){
-    return(
+  useEffect(() => {
+    authClient.getSession().then(({ data, error }) => {
+      setSession(data ?? null)
+      setError(error ?? null)
+    })
+  }, [])
+
+  if (error) {
+    return (
       <Sidebar>
         <SidebarContent>
-          <div className="flex flex-col gap 6">
-            <WarningOctagonIcon color="red" size={64}/>
+          <div className="flex flex-col gap-6">
+            <WarningOctagonIcon color="red" size={64} />
             <h2 className="text-red-50">Failed to fetch session: {error.message}</h2>
           </div>
         </SidebarContent>
       </Sidebar>
     )
   }
-  
 
   return (
     <Sidebar>
@@ -33,11 +49,11 @@ export async function AppSidebar() {
         <SidebarGroup />
         <SidebarGroup />
       </SidebarContent>
-      <SidebarFooter >
-       <div className="flex flex-grid gap-3 outline-solid">
-        <UserCircleIcon weight="duotone"/> 
-        <p>{session?.user.name}</p>
-       </div>
+      <SidebarFooter>
+        <div className="flex items-center gap-3 outline-solid">
+          <UserCircleIcon weight="duotone" />
+          <p>{session?.user?.name ?? session?.user?.email ?? "Anonymous"}</p>
+        </div>
       </SidebarFooter>
     </Sidebar>
   )

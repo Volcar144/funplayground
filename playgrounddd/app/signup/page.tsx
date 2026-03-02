@@ -12,7 +12,7 @@ import {
 import { Button, Label, Input, Checkbox, useKumoToastManager } from "@cloudflare/kumo";
 import { EmailSyntax } from 'email-syntax';
 import { useState } from "react";
-import { WarningCircleIcon } from "@phosphor-icons/react"
+import { CheckCircleIcon, WarningCircleIcon } from "@phosphor-icons/react"
 import { authClient } from "@/lib/auth-client";
 
 
@@ -27,8 +27,10 @@ export default function SignInPage(){
     const [errorEmail, setErrorEmail] = useState(false);
     const [errorPass, setErrorPass] = useState(false)
     const [errorText, setErrorText] = useState("");
-    const [name, setName] = useState("Bob Jenkins");
+    const [name, setName] = useState("");
     const [rememeberMe, setRememberMe] = useState(false);
+    const [success, setSuccess] = useState(true);
+
     
     
 
@@ -88,10 +90,37 @@ export default function SignInPage(){
                     })
                 }
             },
+            onSuccess: (ctx) => {
+                setLoading(false);
+                setDisabled(false);
+                setSuccess(true);
+            }
         },
     
     )
         
+    }
+    if(success){
+        return (
+            <div>
+                <main className="flex flex-col items-center justify-center min-h-screen w-full bg-zinc-50 font-sans dark:bg-black">
+
+                    <CheckCircleIcon color="green"/>
+                    <Card className="w-full max-w-sm shadow-sm">
+                        <CardHeader>
+                            <CardTitle>Success!</CardTitle>
+                            <CardDescription>Sign up has been successfull</CardDescription>
+                        </CardHeader>
+                        <CardContent>
+                            <p>Success! Check your emails for a verification link so you can get started using your account</p>
+                        </CardContent>
+                        <CardFooter>
+                            <Button className="w-full text-center" onClick={() => {window.location.href="/signin"}}>Return to sign-in</Button>
+                        </CardFooter>
+                    </Card>
+                </main>
+            </div>
+        )
     }
 
     return (

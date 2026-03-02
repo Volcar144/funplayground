@@ -29,6 +29,7 @@ export default function SignInPage(){
     const [errorPass, setErrorPass] = useState(false)
     const [errorText, setErrorText] = useState("");
     const [rememeberMe, setRememberMe] = useState(false);
+
     
 
     function errorArea(){
@@ -83,7 +84,13 @@ export default function SignInPage(){
                         description:`An error occured: ${ctx.error.message}`, 
                         variant:"error"
                     })
+                    setLoading(false);
+                    setDisabled(false);
                 }
+            },
+            onSuccess :(context)  =>{
+                setLoading(false);
+                setDisabled(false);
             },
         },
     
@@ -99,7 +106,7 @@ export default function SignInPage(){
                     <CardHeader>
                         <CardTitle>Sign in to your account</CardTitle>
                         <CardDescription>Sign in to continue to the homepage</CardDescription>
-                        <CardAction><Button variant="ghost">Sign up</Button></CardAction>
+                        <CardAction><Button variant="ghost" onClick={() => {window.location.href="/signup"}}>Sign up</Button></CardAction>
                     </CardHeader>
                     <CardContent>
                         <div className="flex flex-col gap-6">
