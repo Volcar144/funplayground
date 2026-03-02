@@ -34,7 +34,7 @@ export async function AppSidebar() {
         <SidebarGroup />
       </SidebarContent>
       <SidebarFooter >
-       <div className="flex flex-grid gap-3">
+       <div className="flex flex-grid gap-3 outline-solid">
         <UserCircleIcon weight="duotone"/> 
         <p>{session?.user.name}</p>
        </div>
