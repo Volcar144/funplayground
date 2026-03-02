@@ -105,7 +105,7 @@ export default function SignInPage(){
             <div>
                 <main className="flex flex-col items-center justify-center min-h-screen w-full bg-zinc-50 font-sans dark:bg-black">
 
-                    <CheckCircleIcon color="green"/>
+                    <CheckCircleIcon color="green" size={64}/>
                     <Card className="w-full max-w-sm shadow-sm">
                         <CardHeader>
                             <CardTitle>Success!</CardTitle>
