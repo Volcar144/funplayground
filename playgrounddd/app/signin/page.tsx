@@ -21,8 +21,8 @@ import { title } from "process";
 export default function SignInPage(){
     const toastManager = useKumoToastManager();
 
-    const [email, setEmail] = useState("bob@example.com");
-    const [password, setPassword] = useState("••••••••");
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
     const [disabled, setDisabled] = useState(false);
     const [loading, setLoading] = useState(false);
     const [errorEmail, setErrorEmail] = useState(false);
@@ -115,13 +115,14 @@ export default function SignInPage(){
                         <div className="flex flex-col">
                             {errorArea()}
                         </div>
+                        <div className="text-gray:50">
+                           <p>Forgot password?</p>
+                        </div>
                     </CardContent>
                     <CardFooter>
                         <div className="flex flex-grid justify-right items-right w-full gap-6">
                             <Button type="submit" variant="primary" className="w-full text-center" size="lg"loading={loading ? true : false } onClick={onLoginButtonClick}>Log In</Button>
-                            <div className="text-gray:50">
-                                <p>Forgot password?</p>
-                            </div>
+
                         </div>
                     </CardFooter>
                     

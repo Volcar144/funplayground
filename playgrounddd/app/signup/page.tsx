@@ -14,15 +14,14 @@ import { EmailSyntax } from 'email-syntax';
 import { useState } from "react";
 import { WarningCircleIcon } from "@phosphor-icons/react"
 import { authClient } from "@/lib/auth-client";
-import { title } from "process";
 
 
 
 export default function SignInPage(){
     const toastManager = useKumoToastManager();
 
-    const [email, setEmail] = useState("bob@example.com");
-    const [password, setPassword] = useState("••••••••");
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
     const [disabled, setDisabled] = useState(false);
     const [loading, setLoading] = useState(false);
     const [errorEmail, setErrorEmail] = useState(false);

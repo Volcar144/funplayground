@@ -102,7 +102,7 @@ export default function ResetPasswordPage() {
         return(
             <div className="flex flex-col justify-center items-center bg-zinc-50 min-h-screen w-full font-sans dark:bg-black">
                 <main className="flex flex-col items-center gap-6">
-                    <div className="animate-spin">
+                    <div >
                         <CheckCheckIcon size={64} color="green" />
                     </div>
                     <Card className="w-full max-w-md">
@@ -159,7 +159,7 @@ export default function ResetPasswordPage() {
 
         return (
             <Suspense fallback={<div className="flex justify-center items-center min-h-screen">Loading...</div>}>
-                <div className="flex flex-col justify center items-center bg-zinc:50 min-h-screen w-full font-sans dark:bg-black">
+                <div className="flex flex-col justify-center items-center bg-zinc:50 min-h-screen w-full font-sans dark:bg-black">
                     <main>
                         <Card>
                             <CardHeader>
@@ -184,7 +184,7 @@ export default function ResetPasswordPage() {
     } else {
         return (
             <Suspense fallback={<div className="flex justify-center items-center min-h-screen">Loading...</div>}>
-                <div className="flex flex-col justify center items-center bg-zinc:50 min-h-screen w-full font-sans dark:bg-black">
+                <div className="flex flex-col justify-center items-center bg-zinc:50 min-h-screen w-full font-sans dark:bg-black">
                     <main>
                         <Card>
                             <CardHeader>
