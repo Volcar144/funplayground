@@ -27,7 +27,6 @@ export const auth = betterAuth({
     plugins:[
         haveIBeenPwned(),
         nextCookies(),
-        dash()
     ],
 
 
