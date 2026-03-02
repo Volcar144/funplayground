@@ -7,18 +7,17 @@ import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
 import { AppSidebar } from "@/components/app-sidebar";
 
 
-export default function HomePage(){
-    const { data: session, isPending } = authClient.useSession();
+export default async function HomePage(){
+    const { data: session, error } = await authClient.getSession();
     const router = useRouter();
 
     useEffect(() => {
-        if (isPending) return;
         if (session) {
             router.push("/home");
         } else {
             router.push("/signin");
         }
-    }, [isPending, session, router]);
+    }, [ session, router]);
 
     return (
         <SidebarProvider   style={

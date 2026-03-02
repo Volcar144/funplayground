@@ -8,19 +8,18 @@ import { useRouter } from "next/navigation";
 
 
 
-export default function CallbackPage(){
-    const { data: session, isPending } = authClient.useSession();
+export default async function CallbackPage(){
+    const { data: session, error } = await authClient.getSession();
     const router = useRouter();
 
     useEffect(() => {
-        if (isPending) return;
-
+        
         if (session) {
             router.push("/home");
         } else {
             router.push("/signin");
         }
-    }, [isPending, session, router]);
+    }, [ session, router]);
 
 
 
