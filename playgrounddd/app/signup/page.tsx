@@ -29,7 +29,7 @@ export default function SignInPage(){
     const [errorText, setErrorText] = useState("");
     const [name, setName] = useState("");
     const [rememeberMe, setRememberMe] = useState(false);
-    const [success, setSuccess] = useState(true);
+    const [success, setSuccess] = useState(false);
 
     
     
@@ -121,9 +121,8 @@ export default function SignInPage(){
                 </main>
             </div>
         )
-    }
-
-    return (
+    } else {
+        return (
         <div>
             <main className="flex flex-col items-center justify-center min-h-screen w-full bg-zinc-50 font-sans dark:bg-black">
 
@@ -155,4 +154,5 @@ export default function SignInPage(){
             </main>
         </div>
     )
+    }
 }
