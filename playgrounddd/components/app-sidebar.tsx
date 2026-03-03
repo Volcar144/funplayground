@@ -30,20 +30,15 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { ChevronsUpDownIcon, LogOutIcon, SettingsIcon } from "lucide-react";
 
-type Session = typeof authClient.$Infer.Session;
+type Session = Awaited<ReturnType<typeof authClient.getSession>>['data'];
 
 export function AppSidebar() {
-
-  
   const [session, setSession] = useState<Session | null>(null)
-
+  const [isLoading, setIsLoading] = useState(true)
   const router = useRouter();
-
   const { isMobile } = useSidebar()
-
   const toastManager = useKumoToastManager();
 
-  // the auth client returns an object with status/statusText/code/message
   type SessionError = {
     code?: string
     message?: string
@@ -62,15 +57,11 @@ export function AppSidebar() {
     })
   }
 
-  function initals(glue: string){
-
-    var initials = glue.replace(/[^a-zA-Z- ]/g, "").match(/\b\w/g);
-    
-    if (glue) {
-        return initials?.join('');
-    }
-
-    return  initials;
+  function getInitials(name: string | undefined | null): string {
+    if (!name) return "?";
+    const matches = name.replace(/[^a-zA-Z- ]/g, "").match(/\b\w/g);
+    if (!matches) return name.charAt(0).toUpperCase();
+    return matches.slice(0, 2).join('').toUpperCase();
   }
 
   async function logOutButton(){
@@ -85,6 +76,7 @@ export function AppSidebar() {
     authClient.getSession().then(({ data, error }) => {
       setSession(data ?? null)
       setError(error ?? null)
+      setIsLoading(false)
     })
   }, [])
 
@@ -96,7 +88,7 @@ export function AppSidebar() {
         <SidebarContent>
           <div className="flex flex-col gap-6">
             <WarningOctagonIcon color="red" size={64} />
-            <h2 className="text-red-50">Failed to fetch session: {error.message}</h2>
+            <h2 className="text-red-500">Failed to fetch session: {error.message}</h2>
           </div>
         </SidebarContent>
       </Sidebar>
@@ -115,56 +107,58 @@ export function AppSidebar() {
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <SidebarMenuButton
-              size="lg"
-              className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
-            >
-              <Avatar className="h-8 w-8 rounded-lg">
-                <AvatarImage src={user?.image || ""} alt={user?.name} />
-                <AvatarFallback className="rounded-lg">CN</AvatarFallback>
-              </Avatar>
-              <div className="grid flex-1 text-left text-sm leading-tight">
-                <span className="truncate font-medium">{user?.name}</span>
-                <span className="truncate text-xs">{user?.email}</span>
-              </div>
-              <ChevronsUpDownIcon className="ml-auto size-4" />
-            </SidebarMenuButton>
+                size="lg"
+                className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
+              >
+                <Avatar className="h-8 w-8 rounded-lg">
+                  <AvatarImage src={user?.image || ""} alt={user?.name || "User"} />
+                  <AvatarFallback className="rounded-lg">
+                    {isLoading ? "..." : getInitials(user?.name)}
+                  </AvatarFallback>
+                </Avatar>
+                <div className="grid flex-1 text-left text-sm leading-tight">
+                  <span className="truncate font-medium">{user?.name || "Guest"}</span>
+                  <span className="truncate text-xs">{user?.email || ""}</span>
+                </div>
+                <ChevronsUpDownIcon className="ml-auto size-4" />
+              </SidebarMenuButton>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-(--radix-dropdown-menu-trigger-width) min-w-56 rounded-lg"
-            side={isMobile ? "bottom" : "right"}
-            align="end"
-            sideOffset={4}>
+              side={isMobile ? "bottom" : "right"}
+              align="end"
+              sideOffset={4}>
                 <DropdownMenuLabel className="p-0 font-normal">
                   <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
                     <Avatar className="h-8 w-8 rounded-lg">
-                      <AvatarImage src={user?.image || `hiyyfifyiffhvbjhihiy7tt8ryyufyy`} alt={user?.name} />
-                      <AvatarFallback className="rounded-lg">{initals(`${user?.name}`)}</AvatarFallback>
+                      <AvatarImage src={user?.image || ""} alt={user?.name || "User"} />
+                      <AvatarFallback className="rounded-lg">{getInitials(user?.name)}</AvatarFallback>
                     </Avatar>
-                  <div className="grid flex-1 text-left text-sm leading-tight">
-                  <span className="truncate font-medium">{user?.name}</span>
-                  <span className="truncate text-xs">{user?.email}</span>
-                </div>
-              </div>
-            </DropdownMenuLabel>
-            <DropdownMenuSeparator />
-            <DropdownMenuGroup>
-              <DropdownMenuItem>
-                <UserCircleIcon />
-                Profile
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <SettingsIcon />
-                Settings
-              </DropdownMenuItem>
-            </DropdownMenuGroup>
-            <DropdownMenuSeparator />
-            <DropdownMenuGroup>
-              <DropdownMenuItem onClick={logOutButton}>
-                <LogOutIcon />
-                Log out
-              </DropdownMenuItem>
-            </DropdownMenuGroup>
-            </DropdownMenuContent>
-          </DropdownMenu>
+                    <div className="grid flex-1 text-left text-sm leading-tight">
+                      <span className="truncate font-medium">{user?.name || "Guest"}</span>
+                      <span className="truncate text-xs">{user?.email}</span>
+                    </div>
+                  </div>
+                </DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuGroup>
+                  <DropdownMenuItem>
+                    <UserCircleIcon />
+                    Profile
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <SettingsIcon />
+                    Settings
+                  </DropdownMenuItem>
+                </DropdownMenuGroup>
+                <DropdownMenuSeparator />
+                <DropdownMenuGroup>
+                  <DropdownMenuItem onClick={logOutButton}>
+                    <LogOutIcon />
+                    Log out
+                  </DropdownMenuItem>
+                </DropdownMenuGroup>
+              </DropdownMenuContent>
+            </DropdownMenu>
         </SidebarMenu>
       </SidebarFooter>
     </Sidebar>
