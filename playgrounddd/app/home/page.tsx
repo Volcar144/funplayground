@@ -2,6 +2,10 @@
 
 import { useEffect, useState } from "react";
 import { authClient } from "@/lib/auth-client";
+
+// derive session shape from the auth client so we don't have to stub with
+// `{}` which trips the linter.
+type Session = typeof authClient.$Infer.Session;
 import { useRouter } from "next/navigation";
 import { SidebarProvider, SidebarTrigger, SidebarInset } from "@/components/ui/sidebar"
 import { AppSidebar } from "@/components/app-sidebar";
@@ -13,16 +17,19 @@ export default function HomePage() {
     // pulling session in useEffect to avoid server-side prerender
 
     const router = useRouter();
-    const [session, setSession] = useState<null | { /* shape */ }>(null);
+    // undefined = not checked yet, null = checked and _not_ signed in, object = signed in
+    const [session, setSession] = useState<Session | null | undefined>(undefined);
 
     useEffect(() => {
         authClient.getSession().then(({ data }) => {
-            setSession(data);
+            // data will be the session object or null if not signed in
+            setSession(data ?? null);
         });
     }, []);
 
     useEffect(() => {
-        if (session !== null && !session) {
+        // only run when we know the outcome of the fetch
+        if (session !== undefined && session === null) {
             // not logged in, send them to signin
             router.push("/signin");
         }

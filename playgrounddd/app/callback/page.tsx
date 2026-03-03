@@ -3,6 +3,9 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Loader } from "@cloudflare/kumo";
 import { authClient } from "@/lib/auth-client";
+
+// use the generated Session type; avoids lint complaining about `{}`.
+type Session = typeof authClient.$Infer.Session;
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
@@ -15,18 +18,19 @@ export default function CallbackPage() {
     // null" error when the client-only router is accessed during prerender.
 
     const router = useRouter();
-    const [session, setSession] = useState<null | { /* shape if needed */ }>(null);
+    // undefined = still loading, null = checked and not signed in
+    const [session, setSession] = useState<Session | null | undefined>(undefined);
 
     useEffect(() => {
         // fetch session on the client only
         authClient.getSession().then(({ data, error }) => {
-            setSession(data);
+            setSession(data ?? null);
         });
     }, []);
 
     useEffect(() => {
-        if (session !== null) {
-            // once we know session state, navigate accordingly
+        // navigate once we know the result (may be null or an object)
+        if (session !== undefined) {
             router.push(session ? "/home" : "/signin");
         }
     }, [session, router]);

@@ -35,7 +35,8 @@ type Session = typeof authClient.$Infer.Session;
 export function AppSidebar() {
 
   
-  const [session, setSession] = useState<Session | null>(null)
+  // undefined = not yet fetched, null = no session, object = active session
+  const [session, setSession] = useState<Session | null | undefined>(undefined)
 
   const router = useRouter();
 
@@ -62,15 +63,15 @@ export function AppSidebar() {
     })
   }
 
-  function initals(glue: string){
-
-    var initials = glue.replace(/[^a-zA-Z- ]/g, "").match(/\b\w/g);
-    
-    if (glue) {
-        return initials?.join('');
-    }
-
-    return  initials;
+  /**
+   * Return the initials for a display name.  If `name` is falsy this returns
+   * an empty string so that callers can safely render the result directly in
+   * an avatar fallback.
+   */
+  function getInitials(name?: string): string {
+    if (!name) return "";
+    const matches = name.replace(/[^A-Za-z\- ]/g, "").match(/\b\w/g);
+    return matches ? matches.join("") : "";
   }
 
   async function logOutButton(){
@@ -120,7 +121,9 @@ export function AppSidebar() {
             >
               <Avatar className="h-8 w-8 rounded-lg">
                 <AvatarImage src={user?.image || ""} alt={user?.name} />
-                <AvatarFallback className="rounded-lg">CN</AvatarFallback>
+                <AvatarFallback className="rounded-lg">
+                  {getInitials(user?.name)}
+                </AvatarFallback>
               </Avatar>
               <div className="grid flex-1 text-left text-sm leading-tight">
                 <span className="truncate font-medium">{user?.name}</span>
@@ -137,7 +140,9 @@ export function AppSidebar() {
                   <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
                     <Avatar className="h-8 w-8 rounded-lg">
                       <AvatarImage src={user?.image || `hiyyfifyiffhvbjhihiy7tt8ryyufyy`} alt={user?.name} />
-                      <AvatarFallback className="rounded-lg">{initals(`${user?.name}`)}</AvatarFallback>
+                      <AvatarFallback className="rounded-lg">
+                        {getInitials(user?.name)}
+                      </AvatarFallback>
                     </Avatar>
                   <div className="grid flex-1 text-left text-sm leading-tight">
                   <span className="truncate font-medium">{user?.name}</span>
