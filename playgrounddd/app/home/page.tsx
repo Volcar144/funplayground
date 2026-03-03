@@ -10,7 +10,12 @@ import { useRouter } from "next/navigation";
 import { SidebarProvider, SidebarTrigger, SidebarInset } from "@/components/ui/sidebar"
 import { AppSidebar } from "@/components/app-sidebar";
 
+
+
 export default function HomePage() {
+    // client component - don't make it async!
+    // pulling session in useEffect to avoid server-side prerender
+
     const router = useRouter();
 <<<<<<< HEAD
     // undefined = not checked yet, null = checked and _not_ signed in, object = signed in
@@ -43,19 +48,13 @@ export default function HomePage() {
         }
     }, [session, router]);
 
-    if (session === null) {
-        return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
-    }
-
-    if (session === false) {
-        return null; // Will redirect
-    }
-
     return (
-        <SidebarProvider style={{
-            "--sidebar-width": "20rem",
-            "--sidebar-width-mobile": "20rem",
-        } as React.CSSProperties}>
+        <SidebarProvider   style={
+    {
+      "--sidebar-width": "20rem",
+      "--sidebar-width-mobile": "20rem",
+    } as React.CSSProperties
+  }>
             <AppSidebar />
             <SidebarInset>
                 <main>
