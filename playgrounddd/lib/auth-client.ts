@@ -1,6 +1,6 @@
 import { createAuthClient } from "better-auth/react"
-import { sentinelClient } from "@better-auth/infra/client";
+import { env } from "@/env"
 
 export const authClient = createAuthClient({
-    
+    baseURL: env.NEXT_PUBLIC_APP_URL
 })
