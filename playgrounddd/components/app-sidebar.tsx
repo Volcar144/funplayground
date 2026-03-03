@@ -33,16 +33,11 @@ import { ChevronsUpDownIcon, LogOutIcon, SettingsIcon } from "lucide-react";
 type Session = typeof authClient.$Infer.Session;
 
 export function AppSidebar() {
-<<<<<<< HEAD
 
   
   // undefined = not yet fetched, null = no session, object = active session
   const [session, setSession] = useState<Session | null | undefined>(undefined)
 
-=======
-  const [session, setSession] = useState<Session | null>(null)
-  const [isLoading, setIsLoading] = useState(true)
->>>>>>> 89e549d225676b37acd0da30087e11f8a29a33bc
   const router = useRouter();
 
   const { isMobile } = useSidebar()
@@ -68,7 +63,6 @@ export function AppSidebar() {
     })
   }
 
-<<<<<<< HEAD
   /**
    * Return the initials for a display name.  If `name` is falsy this returns
    * an empty string so that callers can safely render the result directly in
@@ -78,13 +72,6 @@ export function AppSidebar() {
     if (!name) return "";
     const matches = name.replace(/[^A-Za-z\- ]/g, "").match(/\b\w/g);
     return matches ? matches.join("") : "";
-=======
-  function getInitials(name: string | undefined | null): string {
-    if (!name) return "?";
-    const matches = name.replace(/[^a-zA-Z- ]/g, "").match(/\b\w/g);
-    if (!matches) return name.charAt(0).toUpperCase();
-    return matches.slice(0, 2).join('').toUpperCase();
->>>>>>> 89e549d225676b37acd0da30087e11f8a29a33bc
   }
 
   async function logOutButton(){
@@ -129,21 +116,21 @@ export function AppSidebar() {
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <SidebarMenuButton
-                size="lg"
-                className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
-              >
-                <Avatar className="h-8 w-8 rounded-lg">
-                  <AvatarImage src={user?.image || ""} alt={user?.name || "User"} />
-                  <AvatarFallback className="rounded-lg">
-                    {isLoading ? "..." : getInitials(user?.name)}
-                  </AvatarFallback>
-                </Avatar>
-                <div className="grid flex-1 text-left text-sm leading-tight">
-                  <span className="truncate font-medium">{user?.name || "Guest"}</span>
-                  <span className="truncate text-xs">{user?.email || ""}</span>
-                </div>
-                <ChevronsUpDownIcon className="ml-auto size-4" />
-              </SidebarMenuButton>
+              size="lg"
+              className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
+            >
+              <Avatar className="h-8 w-8 rounded-lg">
+                <AvatarImage src={user?.image || ""} alt={user?.name} />
+                <AvatarFallback className="rounded-lg">
+                  {getInitials(user?.name)}
+                </AvatarFallback>
+              </Avatar>
+              <div className="grid flex-1 text-left text-sm leading-tight">
+                <span className="truncate font-medium">{user?.name}</span>
+                <span className="truncate text-xs">{user?.email}</span>
+              </div>
+              <ChevronsUpDownIcon className="ml-auto size-4" />
+            </SidebarMenuButton>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-(--radix-dropdown-menu-trigger-width) min-w-56 rounded-lg"
             side={isMobile ? "bottom" : "right"}
@@ -152,8 +139,10 @@ export function AppSidebar() {
                 <DropdownMenuLabel className="p-0 font-normal">
                   <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
                     <Avatar className="h-8 w-8 rounded-lg">
-                      <AvatarImage src={user?.image || ""} alt={user?.name || "User"} />
-                      <AvatarFallback className="rounded-lg">{getInitials(user?.name)}</AvatarFallback>
+                      <AvatarImage src={user?.image || `hiyyfifyiffhvbjhihiy7tt8ryyufyy`} alt={user?.name} />
+                      <AvatarFallback className="rounded-lg">
+                        {getInitials(user?.name)}
+                      </AvatarFallback>
                     </Avatar>
                   <div className="grid flex-1 text-left text-sm leading-tight">
                   <span className="truncate font-medium">{user?.name}</span>

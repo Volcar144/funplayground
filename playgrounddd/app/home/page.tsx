@@ -17,7 +17,6 @@ export default function HomePage() {
     // pulling session in useEffect to avoid server-side prerender
 
     const router = useRouter();
-<<<<<<< HEAD
     // undefined = not checked yet, null = checked and _not_ signed in, object = signed in
     const [session, setSession] = useState<Session | null | undefined>(undefined);
 
@@ -25,25 +24,13 @@ export default function HomePage() {
         authClient.getSession().then(({ data }) => {
             // data will be the session object or null if not signed in
             setSession(data ?? null);
-=======
-    const [session, setSession] = useState<null | { /* shape */ } | false>(null);
-
-    useEffect(() => {
-        authClient.getSession().then(({ data }) => {
-            setSession(data ?? false);
->>>>>>> 89e549d225676b37acd0da30087e11f8a29a33bc
         });
     }, []);
 
     useEffect(() => {
-<<<<<<< HEAD
         // only run when we know the outcome of the fetch
         if (session !== undefined && session === null) {
             // not logged in, send them to signin
-=======
-        // session loaded && no user -> redirect to signin
-        if (session === false) {
->>>>>>> 89e549d225676b37acd0da30087e11f8a29a33bc
             router.push("/signin");
         }
     }, [session, router]);
