@@ -37,7 +37,7 @@ export default function CallbackPage() {
         <div>
             <main className="flex flex-col items-center justify-center min-h-screen w-full bg-zinc-50 font-sans dark:bg-black">
 
-                <Card className="w-full">
+                <Card className="w-full text-center items-center">
                     <CardHeader>
                         <CardTitle>Loading...</CardTitle>
                     </CardHeader>

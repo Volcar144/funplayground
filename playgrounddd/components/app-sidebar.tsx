@@ -8,16 +8,38 @@ import {
   SidebarGroup,
   SidebarHeader,
   SidebarMenuButton,
+  SidebarMenuAction,
+  SidebarMenuBadge,
+  SidebarMenu,
+  useSidebar
 } from "@/components/ui/sidebar"
 import { authClient } from "@/lib/auth-client"
 import { UserCircleIcon, UserIcon, WarningOctagonIcon, SignOutIcon } from "@phosphor-icons/react";
-import { DropdownMenu, Button, useKumoToastManager } from "@cloudflare/kumo";
+import {  Button, useKumoToastManager } from "@cloudflare/kumo";
 import { useRouter } from "next/navigation";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { ChevronsUpDownIcon, LogOutIcon, SettingsIcon } from "lucide-react";
+
+type Session = typeof authClient.$Infer.Session;
 
 export function AppSidebar() {
-  const [session, setSession] = useState<any>(null)
+
+  
+  const [session, setSession] = useState<Session | null>(null)
 
   const router = useRouter();
+
+  const { isMobile } = useSidebar()
 
   const toastManager = useKumoToastManager();
 
@@ -40,6 +62,17 @@ export function AppSidebar() {
     })
   }
 
+  function initals(glue: string){
+
+    var initials = glue.replace(/[^a-zA-Z- ]/g, "").match(/\b\w/g);
+    
+    if (glue) {
+        return initials?.join('');
+    }
+
+    return  initials;
+  }
+
   async function logOutButton(){
     toastManager.promise(logOut(), {
       loading: {title: "Logging out", description: "You will be signed out soon!"},
@@ -54,6 +87,8 @@ export function AppSidebar() {
       setError(error ?? null)
     })
   }, [])
+
+  const user = session?.user;
 
   if (error) {
     return (
@@ -76,19 +111,61 @@ export function AppSidebar() {
         <SidebarGroup />
       </SidebarContent>
       <SidebarFooter>
-      <DropdownMenu>
-        <DropdownMenu.Trigger render={<SidebarMenuButton>
-          <div className="flex items-center gap-3 outline-solid text-[28px]">
-            <UserCircleIcon weight="duotone" size={28}/>
-            <p>{session?.user?.name ?? session?.user?.email ?? "Anonymous"}</p>
-          </div>  
-        </SidebarMenuButton>} />
-        <DropdownMenu.Content>
-          <DropdownMenu.Item icon={<UserIcon />}>Profile</DropdownMenu.Item>
-          <DropdownMenu.Separator></DropdownMenu.Separator>
-          <DropdownMenu.Item icon={<SignOutIcon color="red"/>} variant="danger"><Button variant="ghost" color="red" className="text-red-50" onClick={logOutButton}>Log out</Button></DropdownMenu.Item>
-        </DropdownMenu.Content>
-      </DropdownMenu>
+        <SidebarMenu>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <SidebarMenuButton
+              size="lg"
+              className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
+            >
+              <Avatar className="h-8 w-8 rounded-lg">
+                <AvatarImage src={user?.image || ""} alt={user?.name} />
+                <AvatarFallback className="rounded-lg">CN</AvatarFallback>
+              </Avatar>
+              <div className="grid flex-1 text-left text-sm leading-tight">
+                <span className="truncate font-medium">{user?.name}</span>
+                <span className="truncate text-xs">{user?.email}</span>
+              </div>
+              <ChevronsUpDownIcon className="ml-auto size-4" />
+            </SidebarMenuButton>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="w-(--radix-dropdown-menu-trigger-width) min-w-56 rounded-lg"
+            side={isMobile ? "bottom" : "right"}
+            align="end"
+            sideOffset={4}>
+                <DropdownMenuLabel className="p-0 font-normal">
+                  <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
+                    <Avatar className="h-8 w-8 rounded-lg">
+                      <AvatarImage src={user?.image || `hiyyfifyiffhvbjhihiy7tt8ryyufyy`} alt={user?.name} />
+                      <AvatarFallback className="rounded-lg">{initals(`${user?.name}`)}</AvatarFallback>
+                    </Avatar>
+                  <div className="grid flex-1 text-left text-sm leading-tight">
+                  <span className="truncate font-medium">{user?.name}</span>
+                  <span className="truncate text-xs">{user?.email}</span>
+                </div>
+              </div>
+            </DropdownMenuLabel>
+            <DropdownMenuSeparator />
+            <DropdownMenuGroup>
+              <DropdownMenuItem>
+                <UserCircleIcon />
+                Profile
+              </DropdownMenuItem>
+              <DropdownMenuItem>
+                <SettingsIcon />
+                Settings
+              </DropdownMenuItem>
+            </DropdownMenuGroup>
+            <DropdownMenuSeparator />
+            <DropdownMenuGroup>
+              <DropdownMenuItem onClick={logOutButton}>
+                <LogOutIcon />
+                Log out
+              </DropdownMenuItem>
+            </DropdownMenuGroup>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </SidebarMenu>
       </SidebarFooter>
     </Sidebar>
   )

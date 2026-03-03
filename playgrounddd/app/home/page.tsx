@@ -3,8 +3,9 @@
 import { useEffect, useState } from "react";
 import { authClient } from "@/lib/auth-client";
 import { useRouter } from "next/navigation";
-import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
+import { SidebarProvider, SidebarTrigger, SidebarInset } from "@/components/ui/sidebar"
 import { AppSidebar } from "@/components/app-sidebar";
+
 
 
 export default function HomePage() {
@@ -35,9 +36,11 @@ export default function HomePage() {
     } as React.CSSProperties
   }>
             <AppSidebar />
-            <main>
-                <SidebarTrigger></SidebarTrigger>
-            </main>
+            <SidebarInset>
+                <main>
+                    <SidebarTrigger />
+                </main>
+            </SidebarInset>
         </SidebarProvider>
     )
 }
