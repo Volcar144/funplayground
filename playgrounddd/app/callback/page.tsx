@@ -34,8 +34,10 @@ export default function CallbackPage() {
 
     useEffect(() => {
         // navigate once we know the result (may be null or an object)
-        if (session !== undefined) {
-            router.push(session ? "/home" : "/signin");
+        if(!errorP){
+            if (session !== undefined) {
+                router.push(session ? "/home" : "/signin");
+            }
         }
     }, [session, router]);
 
