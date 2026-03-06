@@ -16,7 +16,7 @@ export default function SettingsPage(){
     const [loading1, setLoading1] = useState(false);
     const [ currentPass, setCurrentPass ] = useState("");
     const [ newPass, setNewPass ] = useState("");
-    const [error, setError] = useState(Error)
+    const [error, setError] = useState<Error | null >(null);
     const toastManager = useKumoToastManager();
 
     
@@ -67,7 +67,7 @@ export default function SettingsPage(){
         router.push("/signin")
     }
 
-    if(error){
+    if(error != null){
         return (
             <SidebarProvider>
                 <AppSidebar />
