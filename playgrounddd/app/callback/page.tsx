@@ -46,7 +46,7 @@ export default function CallbackPage() {
             return (
                 <div className="flex flex-col justify-center items-center bg-zinc-50 min-h-screen w-full font-sans dark:bg-black">
                     <main className="flex flex-col items-center gap-6">
-                        <div className="animate-spin">
+                        <div >
                             <WarningCircleIcon size={64} color="red" weight="fill" />
                         </div>
                         <Card className="w-full max-w-md">
