@@ -1,7 +1,7 @@
 "use client"
 
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
-import { Loader, Button } from "@cloudflare/kumo";
+import { Loader, Button, ClipboardText } from "@cloudflare/kumo";
 import { authClient } from "@/lib/auth-client";
 import * as Sentry from "@sentry/nextjs";
 
@@ -56,7 +56,11 @@ export default function CallbackPage() {
                                 <CardTitle className="text-red-600">Error</CardTitle>
                             </CardHeader>
                             <CardContent>
-                                <p className="text-gray-700 dark:text-gray-300">{errorP}. Id: {EID}</p>
+                                <p className="text-gray-700 dark:text-gray-300">{errorP}</p>
+                                <div className="flex flex-grid gap-3">
+                                    <p>Error ID: </p>
+                                    <ClipboardText text={EID}/>
+                                </div>
                             </CardContent>
                             <CardFooter>
                                 <Button className="w-full" onClick={() => { window.location.href = "/signin" }}>Back to Sign In</Button>
