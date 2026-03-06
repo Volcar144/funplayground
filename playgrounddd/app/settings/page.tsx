@@ -88,9 +88,9 @@ export default function SettingsPage(){
                     <div className="flex flex-col gap-5 w-full max-h-screen bg-zic-50 font-sans items-center justify-center dark:bg-black">
 
                         <h1 className="text-3xl">Settings</h1>
-                        <Card>
+                        <Card className="w-3/5">
                             <CardHeader>
-                                <CardTitle>Reset Password</CardTitle>
+                                <CardTitle className="text-xl">Reset Password</CardTitle>
                             </CardHeader>
                             <CardContent>
                                 <Input label="Current Password" value={currentPass} onValueChange={setCurrentPass} type="password" disabled={loading1}/>
