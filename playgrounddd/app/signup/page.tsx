@@ -14,6 +14,7 @@ import { EmailSyntax } from 'email-syntax';
 import { useState } from "react";
 import { CheckCircleIcon, WarningCircleIcon } from "@phosphor-icons/react"
 import { authClient } from "@/lib/auth-client";
+import * as Sentry from "@sentry/nextjs"
 
 
 
@@ -82,7 +83,9 @@ export default function SignInPage(){
                 if(ctx.error.message == "Password is compromised"){
                     setErrorPass(true);
                     setErrorText("Password has been found in a data breach!")
+
                 } else {
+                    Sentry.captureException(`Sign-up error occured: ${ctx.error.message}`)
                     toastManager.add({
                         title:"Error!",
                         description:`An error occured: ${ctx.error.message}`, 

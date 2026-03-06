@@ -10,6 +10,7 @@ import { Suspense } from "react";
 import { CheckCheckIcon } from "lucide-react";
 import { router } from "better-auth/api";
 import { useRouter } from "next/navigation";
+import * as Sentry from "@sentry/nextjs"
 
 
 export default function ResetPasswordPage() {
@@ -48,6 +49,8 @@ export default function ResetPasswordPage() {
     }
 
     if (errorP) {
+        const EID = Sentry.captureException(`Better-auth error occured: ${errorP}`)
+        
         return (
             <div className="flex flex-col justify-center items-center bg-zinc-50 min-h-screen w-full font-sans dark:bg-black">
                 <main className="flex flex-col items-center gap-6">
@@ -59,7 +62,7 @@ export default function ResetPasswordPage() {
                             <CardTitle className="text-red-600">Error</CardTitle>
                         </CardHeader>
                         <CardContent>
-                            <p className="text-gray-700 dark:text-gray-300">{errorP}</p>
+                            <p className="text-gray-700 dark:text-gray-300">{errorP}. Id: {EID}</p>
                         </CardContent>
                         <CardFooter>
                             <Button className="w-full" onClick={() => { window.location.href = "/signin" }}>Back to Sign In</Button>
