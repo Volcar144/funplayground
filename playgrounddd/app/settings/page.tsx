@@ -8,6 +8,7 @@ import { authClient } from "@/lib/auth-client"
 import { useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { error } from "console"
+import GlobalError from "../global-error"
 
 type Session = typeof authClient.$Infer.Session;
 
@@ -15,6 +16,7 @@ export default function SettingsPage(){
     const [loading1, setLoading1] = useState(false);
     const [ currentPass, setCurrentPass ] = useState("");
     const [ newPass, setNewPass ] = useState("");
+    const [error, setError] = useState(Error)
     const toastManager = useKumoToastManager();
 
     
@@ -44,7 +46,7 @@ export default function SettingsPage(){
             revokeOtherSessions: true,
             fetchOptions: {
                 onError(context) {
-                    
+                    setError(context.error)
                 },
             }
         }, )
@@ -59,6 +61,21 @@ export default function SettingsPage(){
             error: {title: "Error!", description:`An error occured while changing your password!`}
         })
 
+        setLoading1(false);
+
+        authClient.signOut();
+        router.push("/signin")
+    }
+
+    if(error){
+        return (
+            <SidebarProvider>
+                <AppSidebar />
+                <SidebarInset>
+                    <GlobalError error={error}></GlobalError>
+                </SidebarInset>
+            </SidebarProvider>
+        )
     }
 
     return (
@@ -74,7 +91,7 @@ export default function SettingsPage(){
                             <h3>Change Password</h3>
                             <p>Change your password</p>
                             <Input label="Current Password" value={currentPass} onValueChange={setCurrentPass} type="password" disabled={loading1}/>
-                            <Input label="New Password" type="password" value={newPass} onValueChange={setCurrentPass} disabled={loading1}/>
+                            <Input label="New Password" type="password" value={newPass} onValueChange={setNewPass} disabled={loading1}/>
                             <Button variant="primary" loading={loading1}></Button>
                         </Surface>
 

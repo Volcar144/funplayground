@@ -1,10 +1,13 @@
 "use client"
 
-import Link from 'next/link'
 import { Empty, Button } from '@cloudflare/kumo'
 import { QuestionMarkIcon } from '@phosphor-icons/react'
+
+export const dynamic = 'force-dynamic'
  
 export default function NotFound() {
+
+  
   return (
     <div>
       <Empty
