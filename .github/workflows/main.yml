@@ -4,12 +4,14 @@ on: [push, check_run, pull_request, pull_request_review, fork, merge_group, work
 jobs:
   Build:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./playgrounddd
     steps:
       - uses: actions/checkout@v5
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
-      - run: cd ./playgrounddd
       - uses: pnpm/action-setup@v4
         with:
           version: 10
