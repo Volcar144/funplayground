@@ -17,6 +17,7 @@ export default function NotFound() {
         title="404 - Isn't this page cool"
         description="The page you are looking for does not exist - now with kumo ui."
         icon={<QuestionMarkIcon size={48} className="kumo-text-inactive"/>}
+        className='min-h-screen w-full'
         contents={
           <div className="flex gap-2">
             <Button variant="primary" onClick={() => window.location.href = '/'}>Go Home</Button>

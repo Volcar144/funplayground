@@ -9,6 +9,7 @@ import { useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { error } from "console"
 import GlobalError from "../global-error"
+import { Card, CardHeader, CardTitle, CardContent, CardFooter } from "@/components/ui/card"
 
 type Session = typeof authClient.$Infer.Session;
 
@@ -86,14 +87,19 @@ export default function SettingsPage(){
                     <SidebarTrigger />
                     <div className="flex flex-col gap-5 w-full max-h-screen bg-zic-50 font-sans items-center justify-center dark:bg-black">
 
-                        <h1>Settings</h1>
-                        <Surface>
-                            <h3>Change Password</h3>
-                            <p>Change your password</p>
-                            <Input label="Current Password" value={currentPass} onValueChange={setCurrentPass} type="password" disabled={loading1}/>
-                            <Input label="New Password" type="password" value={newPass} onValueChange={setNewPass} disabled={loading1}/>
-                            <Button variant="primary" loading={loading1}></Button>
-                        </Surface>
+                        <h1 className="text-3xl">Settings</h1>
+                        <Card>
+                            <CardHeader>
+                                <CardTitle>Reset Password</CardTitle>
+                            </CardHeader>
+                            <CardContent>
+                                <Input label="Current Password" value={currentPass} onValueChange={setCurrentPass} type="password" disabled={loading1}/>
+                                <Input label="New Password" type="password" value={newPass} onValueChange={setNewPass} disabled={loading1}/>
+                            </CardContent>
+                            <CardFooter>
+                                <Button variant="primary" loading={loading1} onClick={passwordChangeButton}>Change Password</Button>
+                            </CardFooter>
+                        </Card>
 
                     </div>
                 </main>

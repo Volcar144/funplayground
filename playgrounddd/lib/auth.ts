@@ -3,7 +3,7 @@ import {Pool} from "pg"
 import { haveIBeenPwned } from "better-auth/plugins"
 import { nextCookies } from "better-auth/next-js";
 import { sendEmailVerification, sendOnPasswordReset, sendPasswordReset } from "./email";
-import { dash } from "@better-auth/infra";
+
 
 export const auth = betterAuth({
     database: new Pool({
