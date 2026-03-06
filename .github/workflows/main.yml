@@ -1,0 +1,26 @@
+name: Run Build
+run-name: ${{ github.actor }} triggered a build
+on: [push, check_run, pull_request, pull_request_review, fork, merge_group, workflow_dispatch]
+jobs:
+  Build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./playgrounddd
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+      - run: pnpm install
+      - name: Cache
+        uses: actions/cache@v5.0.3
+        with:
+          # A list of files, directories, and wildcard patterns to cache and restore
+          path: ./node_modules
+          # An explicit key for restoring and saving the cache
+          key: dependencies
+      - run: pnpm build
