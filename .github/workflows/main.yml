@@ -1,0 +1,14 @@
+name: Run Build
+run-name: ${{ github.actor }} triggered a build
+on: [push, check_run, pull_request, pull_request_review, fork, merge_group]
+jobs:
+  Build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - run: npm install pnpm -y 
+      - run: pnpm install -y
+      - run: pnpm build -y
