@@ -1,6 +1,6 @@
 name: Run Build
 run-name: ${{ github.actor }} triggered a build
-on: [push, check_run, pull_request, pull_request_review, fork, merge_group]
+on: [push, check_run, pull_request, pull_request_review, fork, merge_group, workflow_dispatch]
 jobs:
   Build:
     runs-on: ubuntu-latest
