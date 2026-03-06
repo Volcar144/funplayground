@@ -30,5 +30,6 @@ jobs:
           echo BETTER_AUTH_SECRET=${{ secrets.BETTER_AUTH_SECRET}} >> .env
           echo BETTER_AUTH_URL=${{ secrets.BETTER_AUTH_URL }} >> .env
           echo DATABASE_URL=${{ secrets.DATATBASE_URL }} >> .env
+          echo NODE_ENV="development" >> .env
 
       - run: pnpm build

@@ -4,6 +4,9 @@ import { Empty, Button } from '@cloudflare/kumo'
 import { QuestionMarkIcon } from '@phosphor-icons/react'
 
 export const dynamic = 'force-dynamic'
+export const dynamicParams = true;
+export const fetchCache = "force-no-store";
+
  
 export default function NotFound() {
 
