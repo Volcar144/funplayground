@@ -9,8 +9,16 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
+      - run: cd ./playgrounddd
       - uses: pnpm/action-setup@v4
         with:
           version: 10
-      - run: pnpm install -y
-      - run: pnpm build -y
+      - run: pnpm install
+      - name: Cache
+        uses: actions/cache@v5.0.3
+        with:
+          # A list of files, directories, and wildcard patterns to cache and restore
+          path: ./node_modules
+          # An explicit key for restoring and saving the cache
+          key: dependencies
+      - run: pnpm build
