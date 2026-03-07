@@ -26,6 +26,8 @@
     "pg": "^8.19.0",
     "pnpm": "^10.30.1",
     "postcss": "^8.5.8",
+    "posthog-js": "^1.359.1",
+    "posthog-node": "^5.28.0",
     "radix-ui": "^1.4.3",
     "react": "19.2.3",
     "react-dom": "19.2.3",

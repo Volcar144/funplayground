@@ -10,6 +10,8 @@ import { useRouter } from "next/navigation";
 import { SidebarProvider, SidebarTrigger, SidebarInset } from "@/components/ui/sidebar"
 import { AppSidebar } from "@/components/app-sidebar";
 
+import * as Sentry from "@sentry/nextjs"
+
 
 
 export default function HomePage() {
@@ -21,6 +23,12 @@ export default function HomePage() {
     const [session, setSession] = useState<Session | null | undefined>(undefined);
 
     useEffect(() => {
+        Sentry.addBreadcrumb({
+            category: "auth",
+            message: "Starting session retrieval for /home",
+            level: "info"
+        })
+
         authClient.getSession().then(({ data }) => {
             // data will be the session object or null if not signed in
             setSession(data ?? null);

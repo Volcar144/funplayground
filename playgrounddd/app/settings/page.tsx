@@ -11,6 +11,9 @@ import { error } from "console"
 import GlobalError from "../global-error"
 import { Card, CardHeader, CardTitle, CardContent, CardFooter } from "@/components/ui/card"
 
+import * as Sentry from "@sentry/nextjs"
+import posthog from "posthog-js";
+
 type Session = typeof authClient.$Infer.Session;
 
 export default function SettingsPage(){
@@ -26,6 +29,12 @@ export default function SettingsPage(){
     const [session, setSession] = useState<Session | null | undefined>(undefined);
     
     useEffect(() => {
+        Sentry.addBreadcrumb({
+            category: "auth",
+            message: "Starting session retrieval for /home",
+            level: "info"
+        })
+
        authClient.getSession().then(({ data }) => {
             // data will be the session object or null if not signed in
             setSession(data ?? null);
@@ -41,12 +50,24 @@ export default function SettingsPage(){
     }, [session, router]);
 
     async function changePass(){
+        Sentry.addBreadcrumb({
+            category: "auth",
+            message: `Password change beginning for user: ${session?.user.id}`,
+            level: "info"
+        })
+
         authClient.changePassword({
             currentPassword:currentPass,
             newPassword:newPass,
             revokeOtherSessions: true,
             fetchOptions: {
                 onError(context) {
+                    Sentry.addBreadcrumb({
+                        category: "auth",
+                        message: `Error occured while changing password: ${context.error.message}`,
+                        level: "error"
+                    })
+                    Sentry.captureException(context.error)
                     setError(context.error)
                 },
             }
@@ -55,6 +76,15 @@ export default function SettingsPage(){
 
     async function passwordChangeButton(){
         setLoading1(true);
+
+        Sentry.addBreadcrumb({
+            category: "actions",
+            message: "Password change button clicked",
+            level: "info"
+        })
+        posthog.capture('password_change_clicked', {
+            user_id: session?.user.id,
+        });
 
         toastManager.promise( changePass(),{
             success: {title: "Success!", description: "Successfully chenged password, please log in again"},
@@ -69,6 +99,12 @@ export default function SettingsPage(){
     }
 
     if(error != null){
+        Sentry.addBreadcrumb({
+            category: "generic",
+            message: "Error occured on settings page",
+            level: "error"
+        })
+
         return (
             <SidebarProvider>
                 <AppSidebar />

@@ -4,6 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/componen
 import { Loader, Button, ClipboardText } from "@cloudflare/kumo";
 import { authClient } from "@/lib/auth-client";
 import * as Sentry from "@sentry/nextjs";
+import posthog from "posthog-js";
 
 // use the generated Session type; avoids lint complaining about `{}`.
 type Session = typeof authClient.$Infer.Session;
@@ -24,12 +25,23 @@ export default function CallbackPage() {
     const [errorP, setErrorP] = useState<string | null>(null);
 
     useEffect(() => {
+        Sentry.addBreadcrumb({
+            category: "generic",
+            message: "Getting search params",
+            level: "info"
+            })
+
         const params = new URLSearchParams(window.location.search);
         // fetch session on the client only
         authClient.getSession().then(({ data, error }) => {
             setSession(data ?? null);
         });
         setErrorP(params.get("error"));
+        Sentry.addBreadcrumb({
+            category: "generic",
+            message: "Got search params",
+            level: "info"
+        })
     }, []);
 
     useEffect(() => {
@@ -42,7 +54,9 @@ export default function CallbackPage() {
     }, [session, router]);
 
         if (errorP) {
-            
+            posthog.capture('auth_callback_error', {
+                error: errorP,
+            });
             const EID = Sentry.captureException(`Better-auth error occured: ${errorP}`)
 
             return (

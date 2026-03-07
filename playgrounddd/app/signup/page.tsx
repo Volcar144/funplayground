@@ -15,6 +15,7 @@ import { useState } from "react";
 import { CheckCircleIcon, WarningCircleIcon } from "@phosphor-icons/react"
 import { authClient } from "@/lib/auth-client";
 import * as Sentry from "@sentry/nextjs"
+import posthog from "posthog-js";
 
 
 
@@ -47,6 +48,12 @@ export default function SignInPage(){
     }
 
     async function onLoginButtonClick(){
+        Sentry.addBreadcrumb({
+            category: "actions",
+            message: "Signup button Clicked",
+            level: "info"
+        })
+
         setLoading(true);
         setDisabled(true);
 
@@ -80,6 +87,9 @@ export default function SignInPage(){
             onError: (ctx) => {
                 setLoading(false);
                 setDisabled(false);
+                posthog.capture('sign_up_failed', {
+                    error_message: ctx.error.message,
+                });
                 if(ctx.error.message == "Password is compromised"){
                     setErrorPass(true);
                     setErrorText("Password has been found in a data breach!")
@@ -88,15 +98,38 @@ export default function SignInPage(){
                     Sentry.captureException(`Sign-up error occured: ${ctx.error.message}`)
                     toastManager.add({
                         title:"Error!",
-                        description:`An error occured: ${ctx.error.message}`, 
+                        description:`An error occured: ${ctx.error.message}`,
                         variant:"error"
                     })
                 }
             },
             onSuccess: (ctx) => {
+
                 setLoading(false);
                 setDisabled(false);
                 setSuccess(true);
+                posthog.identify(ctx.data.user.id, {
+                    email: ctx.data.user.email,
+                    name: ctx.data.user.name,
+                });
+                posthog.capture('user_signed_up', {
+                    email: ctx.data.user.email,
+                    name: ctx.data.user.name,
+                });
+                const session = authClient.useSession()
+
+                while(!session.isPending){
+                    Sentry.setUser({
+                        email: session.data?.user.email,
+                        id: session.data?.user.id,
+                    })
+                }
+
+                Sentry.addBreadcrumb({
+                    category: "auth",
+                    message: "User signed up",
+                    level: "info"
+                })
             }
         },
     

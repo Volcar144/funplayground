@@ -11,6 +11,7 @@ import { CheckCheckIcon } from "lucide-react";
 import { router } from "better-auth/api";
 import { useRouter } from "next/navigation";
 import * as Sentry from "@sentry/nextjs"
+import posthog from "posthog-js";
 
 
 export default function ResetPasswordPage() {
@@ -20,9 +21,21 @@ export default function ResetPasswordPage() {
     const [errorP, setErrorP] = useState<string | null>(null);
     
     useEffect(() => {
+        Sentry.addBreadcrumb({
+            category: "generic",
+            message: "Getting search params",
+            level: "info"
+        })
+
         const params = new URLSearchParams(window.location.search);
         setToken(params.get("token"));
         setErrorP(params.get("error"));
+
+        Sentry.addBreadcrumb({
+            category: "generic",
+            message: "Got search params",
+            level: "info"
+        })
     }, []);
 
     const [loading, setLoading] = useState(false);
@@ -50,6 +63,14 @@ export default function ResetPasswordPage() {
 
     if (errorP) {
         const EID = Sentry.captureException(`Better-auth error occured: ${errorP}`)
+
+        Sentry.addBreadcrumb({
+            category: "generic",
+            message: "Error caught via parameters on password reset",
+            level:"error"
+            
+        })
+
         
         return (
             <div className="flex flex-col justify-center items-center bg-zinc-50 min-h-screen w-full font-sans dark:bg-black">
@@ -98,6 +119,7 @@ export default function ResetPasswordPage() {
             setStatus('idle');
         } else {
             setStatus('sent');
+            posthog.capture('password_reset_requested');
         }
     }
 
@@ -143,9 +165,11 @@ export default function ResetPasswordPage() {
         })
 
         setLoading(false);
-        
+
         if(error){
             setError(`${error.message}`)
+        } else {
+            posthog.capture('password_reset_completed');
         }
 
         router.push("/signin");

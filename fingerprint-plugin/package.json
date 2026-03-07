@@ -1,10 +1,9 @@
 {
-	"name": "fingerprint-plugin",
+	"name": "fingerprint-betterauth",
 	"displayName": "Fingerprint Better-auth Plugin",
 	"author": {"name": "Volcar144", "url": "https://archiem.top"},
 	"repository": {"url": "https://github.com/Volcar144/funplayground"},
 	"version": "1.0.0",
-	"private": "false",
 
 	"dependencies": {
 		"@fingerprintjs/fingerprintjs": "^5.1.0",

@@ -11,10 +11,15 @@ import {
 } from "@/components/ui/card";
 import { Button, Label, Input, Checkbox, useKumoToastManager } from "@cloudflare/kumo";
 import { EmailSyntax } from 'email-syntax';
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { WarningCircleIcon } from "@phosphor-icons/react"
 import { authClient } from "@/lib/auth-client";
-import { title } from "process";
+type Session = typeof authClient.$Infer.Session;
+
+import * as Sentry from "@sentry/nextjs"
+import { router } from "better-auth/api";
+import { useRouter } from "next/router";
+import posthog from "posthog-js";
 
 
 
@@ -29,6 +34,39 @@ export default function SignInPage(){
     const [errorPass, setErrorPass] = useState(false)
     const [errorText, setErrorText] = useState("");
     const [rememeberMe, setRememberMe] = useState(false);
+    const [session, setSession] = useState<Session | null | undefined>(undefined);
+
+    const router = useRouter()
+
+    useEffect(()=>{
+        Sentry.addBreadcrumb({
+            category: "auth",
+            message: "Starting session retrieval for /home",
+            level: "info"
+        })
+
+        authClient.getSession().then(({ data, error }) => {
+            if(error){
+                Sentry.captureException(error);
+            }
+            setSession(data ?? null);
+        });
+    })
+    
+    useEffect(() =>{
+        Sentry.addBreadcrumb({
+            category:"auth",
+            message: "Redirect proccess started",
+            level: "info"
+        })
+
+        if(session !== undefined){
+            if(session){
+                router.push("/home");
+            }
+            Sentry.captureException(new Error("Session not undefined but not true."))
+        }
+    })
 
     
 
@@ -46,6 +84,12 @@ export default function SignInPage(){
     async function onLoginButtonClick(){
         setLoading(true);
         setDisabled(true);
+
+        Sentry.addBreadcrumb({
+            category: "actions",
+            message: "Login button Clicked",
+            level: "info"
+        })
 
         if(!EmailSyntax.validate(email)){
             setErrorEmail(true);
@@ -75,13 +119,22 @@ export default function SignInPage(){
                 setDisabled(true);
             },
             onError: (ctx) => {
+                posthog.capture('sign_in_failed', {
+                    error_message: ctx.error.message,
+                });
                 if(ctx.error.message == "Password is compromised"){
                     setErrorPass(true);
                     setErrorText("Password has been found in a data breach!")
                 } else {
+                    Sentry.addBreadcrumb({
+                        category: "auth",
+                        message: `Generic auth error occured: ${ctx.error.message}`,
+                        level: "warning"
+                    })
+
                     toastManager.add({
                         title:"Error!",
-                        description:`An error occured: ${ctx.error.message}`, 
+                        description:`An error occured: ${ctx.error.message}`,
                         variant:"error"
                     })
                     setLoading(false);
@@ -91,6 +144,22 @@ export default function SignInPage(){
             onSuccess :(context)  =>{
                 setLoading(false);
                 setDisabled(false);
+                posthog.identify(context.data.user.id, {
+                    email: context.data.user.email,
+                    name: context.data.user.name,
+                });
+                posthog.capture('user_signed_in', {
+                    email: context.data.user.email,
+                    remember_me: rememeberMe,
+                });
+                const session = authClient.useSession()
+
+                while(!session.isPending){
+                    Sentry.setUser({
+                        email: session.data?.user.email,
+                        id: session.data?.user.id,
+                    })
+                }
             },
         },
     
