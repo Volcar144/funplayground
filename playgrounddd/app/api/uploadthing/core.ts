@@ -1,6 +1,8 @@
 import { createUploadthing, type FileRouter } from "uploadthing/next";
 import { UploadThingError } from "uploadthing/server";
 import { authClient } from "@/lib/auth-client";
+import { getPostHogClient } from "@/lib/posthog-server";
+import * as Sentry from "@sentry/nextjs";
 
 const f = createUploadthing();
 
@@ -20,6 +22,26 @@ export const ddFileRouter = {
   })
   .onUploadComplete(async ({ metadata, file }) => {
     console.log("Uploaded by user", metadata.userId);
+
+    Sentry.addBreadcrumb({
+      category: "generic",
+      message: "Image uploaded",
+      level: "info"
+    })
+
+    if (metadata.userId) {
+      const posthog = getPostHogClient();
+      posthog.capture({
+        distinctId: metadata.userId,
+        event: 'file_uploaded',
+        properties: {
+          file_url: file.ufsUrl,
+          file_size: file.size,
+          file_type: file.type,
+          upload_type: 'profile_picture',
+        },
+      });
+    }
 
     return{uploadedBy: metadata.userId, fileUrl: file.ufsUrl}
   })

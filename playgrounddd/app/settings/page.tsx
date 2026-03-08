@@ -61,6 +61,11 @@ export default function SettingsPage(){
             newPassword:newPass,
             revokeOtherSessions: true,
             fetchOptions: {
+                onSuccess() {
+                    posthog.capture('password_changed', {
+                        user_id: session?.user.id,
+                    });
+                },
                 onError(context) {
                     Sentry.addBreadcrumb({
                         category: "auth",

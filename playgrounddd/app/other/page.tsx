@@ -3,6 +3,7 @@
 import { Button, Tooltip, TooltipProvider, Text, Banner, Breadcrumbs, Tabs, Meter, Toast, useKumoToastManager} from "@cloudflare/kumo"
 import { InfoIcon, PlusIcon, HouseIcon, ClockCounterClockwiseIcon } from "@phosphor-icons/react"
 import { useState } from "react"
+import posthog from "posthog-js"
 
 
 export default function OtherPage() {
@@ -14,6 +15,9 @@ export default function OtherPage() {
     function increaseMeter(){
         if(meterAmount <= 100){
             setMeterAmount(meterAmount + 1);
+            posthog.capture('meter_increased', {
+                new_value: meterAmount + 1,
+            });
         } else {
             toastManager.add({
                 title:"Error!",
@@ -24,6 +28,9 @@ export default function OtherPage() {
     }
 
     function resetMeter(){
+        posthog.capture('meter_reset', {
+            previous_value: meterAmount,
+        });
         setMeterAmount(0);
     }
 

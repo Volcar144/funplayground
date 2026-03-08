@@ -29,6 +29,7 @@ import {
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { ChevronsUpDownIcon, LogOutIcon, SettingsIcon } from "lucide-react";
+import posthog from "posthog-js";
 
 type Session = typeof authClient.$Infer.Session;
 
@@ -54,6 +55,10 @@ export function AppSidebar() {
   const [error, setError] = useState<SessionError>(null)
 
   async function logOut(){
+    posthog.capture('user_signed_out', {
+      user_id: session?.user.id,
+    });
+    posthog.reset();
     authClient.signOut({
       fetchOptions: {
         onSuccess: () => {
