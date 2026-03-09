@@ -17,8 +17,7 @@ import { authClient } from "@/lib/auth-client";
 type Session = typeof authClient.$Infer.Session;
 
 import * as Sentry from "@sentry/nextjs"
-import { router } from "better-auth/api";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import posthog from "posthog-js";
 
 
