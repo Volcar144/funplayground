@@ -3,7 +3,7 @@ import {Pool} from "pg"
 import { haveIBeenPwned } from "better-auth/plugins"
 import { nextCookies } from "better-auth/next-js";
 import { sendEmailVerification, sendOnPasswordReset, sendPasswordReset } from "./email";
-
+import { testUtils } from "better-auth/plugins"
 
 
 export const auth = betterAuth({
@@ -28,6 +28,8 @@ export const auth = betterAuth({
     plugins:[
         haveIBeenPwned(),
         nextCookies(),
+        // Test-only helpers (factories/login/cookies/OTP capture). Do not use in production.
+        testUtils({ captureOTP: true })
     ],
 
 
