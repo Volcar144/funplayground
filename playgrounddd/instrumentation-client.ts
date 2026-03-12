@@ -34,12 +34,9 @@ export const onRouterTransitionStart = Sentry.captureRouterTransitionStart;
 
 import posthog from "posthog-js";
 
-posthog.init(process.env.NEXT_PUBLIC_POSTHOG_KEY!, {
-  api_host: "t.archiem.top",
-  ui_host: process.env.NEXT_PUBLIC_POSTHOG_HOST,
-  defaults: "2026-01-30",
-  capture_exceptions: true,
-  debug: process.env.NODE_ENV === "development",
-});
+posthog.init('phc_afTlKpWWLy1V83Jhvl82gMBS2HF0BVBW92CCno8zP0p', {
+    api_host: 'https://t.archiem.top',
+    defaults: '2026-01-30'
+})
 
 Sentry.getCurrentScope().setTag('posthog_session_id', posthog.get_session_id())
