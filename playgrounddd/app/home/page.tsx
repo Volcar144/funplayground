@@ -11,6 +11,7 @@ import { SidebarProvider, SidebarTrigger, SidebarInset } from "@/components/ui/s
 import { AppSidebar } from "@/components/app-sidebar";
 
 import * as Sentry from "@sentry/nextjs"
+import posthog from "posthog-js";
 
 
 
@@ -21,6 +22,13 @@ export default function HomePage() {
     const router = useRouter();
     // undefined = not checked yet, null = checked and _not_ signed in, object = signed in
     const [session, setSession] = useState<Session | null | undefined>(undefined);
+    const [ notesEnabled, setNotesEnabled] = useState(false);
+
+    posthog.onFeatureFlags(function() {
+        if (posthog.isFeatureEnabled('betaFunctionaity') ) {
+            setNotesEnabled(true);
+        }
+    })  
 
     useEffect(() => {
         Sentry.addBreadcrumb({
