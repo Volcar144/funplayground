@@ -2,7 +2,9 @@ ignoredBuiltDependencies:
   - '@sentry/cli@2.58.5'
 
 onlyBuiltDependencies:
+  - '@prisma/engines'
   - msw
+  - prisma
 
 overrides:
   '@hono/node-server@<1.19.10': '>=1.19.10'

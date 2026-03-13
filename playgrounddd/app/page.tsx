@@ -45,16 +45,6 @@ export default function Home() {
       
       <Suspense fallback={<Loading />}>
         <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-          <div style={{ width: '100%', height: '600px', position: 'relative' }}>
-            <DarkVeil
-            hueShift={235}
-            noiseIntensity={0}
-            scanlineIntensity={1}
-            speed={1.6}
-            scanlineFrequency={1.7}
-            warpAmount={0}
-          />
-          </div>
           <main className="flex min-h-screen w-full max-w-3xl flex-col items-center text-white justify-between py-32 px-16 bg-black sm:items-start">
             <div className="flex flex-col items-right align-top">
               <ThemeToggle />
