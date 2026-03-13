@@ -5,6 +5,18 @@ const nextConfig: NextConfig = {
   /* config options here */
   experimental: { serverMinification: false},
   skipTrailingSlashRedirect: true,
+  async rewrites() {
+    return [
+      {
+        source: "/ingest/static/:path*",
+        destination: "https://eu-assets.i.posthog.com/static/:path*",
+      },
+      {
+        source: "/ingest/:path*",
+        destination: "https://t.archiem.top/:path*",
+      },
+    ];
+  },
 };
 
 export default withSentryConfig(nextConfig, {

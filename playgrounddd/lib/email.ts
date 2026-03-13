@@ -37,7 +37,7 @@ export async function sendEmailVerification(email: string, url: string, token: s
                     </p>
                     
                     <div style="text-align: center; margin: 30px 0;">
-                        <a href="${url}" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 12px 40px; text-decoration: none; border-radius: 5px; font-weight: bold; display: inline-block; font-size: 16px;">
+                        <a href="${url}" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: black; padding: 12px 40px; text-decoration: none; border-radius: 5px; font-weight: bold; display: inline-block; font-size: 16px;">
                             Verify Email
                         </a>
                     </div>

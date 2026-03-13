@@ -7,7 +7,7 @@ export function getPostHogClient() {
     posthogClient = new PostHog(
       process.env.NEXT_PUBLIC_POSTHOG_KEY!,
       {
-        host: "https://t.archiem.top",
+        host: "eu.posthog.com",
         flushAt: 1,
         flushInterval: 0,
       }

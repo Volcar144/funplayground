@@ -74,7 +74,7 @@ export default function SignInPage(){
             return (
                 <div className="flex flex-grid gap-1 text-red:50">
                     <WarningCircleIcon size={16} color="red" weight="fill"/>
-                    <p color="red">{errorText}</p>
+                    <p color="red" className="text-red">{errorText}</p>
                 </div>
             )
         }

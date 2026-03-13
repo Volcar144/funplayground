@@ -1,6 +1,28 @@
 import { test, expect } from '@playwright/test';
+import type { TestHelpers } from 'better-auth/plugins';
+
+import { auth } from '@/lib/auth';
 
 test.describe('Auth pages (smoke + client-side validation)', () => {
+  let testUtils: TestHelpers;
+  const createdUserIds: string[] = [];
+
+  test.beforeAll(async () => {
+    const ctx = await auth.$context;
+    testUtils = ctx.test;
+  });
+
+  test.afterAll(async () => {
+    await Promise.all(
+      createdUserIds.map(async (id) => {
+        try {
+          await testUtils.deleteUser(id);
+        } catch {
+          // ignore
+        }
+      }),
+    );
+  });
   test('signin page renders and has expected controls', async ({ page }) => {
     await page.goto('/signin');
 
@@ -47,6 +69,28 @@ test.describe('Auth pages (smoke + client-side validation)', () => {
     // The app redirects client-side after session fetch resolves.
     await page.waitForURL(/\/signin$/, { timeout: 10_000 });
     await expect(page).toHaveURL(/\/signin$/);
+  });
+
+  test('home is accessible when authenticated (inject cookies via better-auth test utils)', async ({ page, context }) => {
+    const user = testUtils.createUser({
+      email: `pw-${Date.now()}@example.com`,
+      name: 'Playwright User',
+    });
+    const saved = await testUtils.saveUser(user);
+    createdUserIds.push(saved.id);
+
+    const baseURL = test.info().project.use.baseURL;
+    if (!baseURL) throw new Error('Playwright baseURL is not configured');
+    const hostname = new URL(baseURL).hostname;
+
+    const cookies = await testUtils.getCookies({ userId: saved.id, domain: hostname });
+    await context.addCookies(cookies);
+
+    await page.goto('/home');
+
+    // Best-effort: ensure we did not get redirected to signin.
+    // (Adjust to a more specific assertion once /home UI is stable.)
+    await expect(page).not.toHaveURL(/\/signin$/);
   });
 
   test('callback shows loading UI (no error param)', async ({ page }) => {

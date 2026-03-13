@@ -27,10 +27,11 @@ export default defineConfig({
   webServer: {
     // next dev options must be passed after `--` when invoking via pnpm scripts.
     command:
-      process.env.PLAYWRIGHT_WEB_SERVER_COMMAND ?? `pnpm exec next dev --port ${PORT}`,
+      process.env.PLAYWRIGHT_WEB_SERVER_COMMAND ??
+      `node ./node_modules/next/dist/bin/next dev --port ${PORT}`,
     url: baseURL,
     reuseExistingServer: !process.env.CI,
-    timeout: 120_000,
+    timeout: 240_000,
   },
   outputDir: 'test-results/playwright',
 });
