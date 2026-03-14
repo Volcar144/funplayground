@@ -3,8 +3,19 @@ ignoredBuiltDependencies:
 
 onlyBuiltDependencies:
   - '@prisma/engines'
+  - '@qodo/command'
+  - '@scarf/scarf'
+  - '@sentry/cli'
+  - core-js
+  - cypress
+  - esbuild
+  - msgpackr-extract
   - msw
   - prisma
+  - protobufjs
+  - sharp
+  - unrs-resolver
+  - yarn
 
 overrides:
   '@hono/node-server@<1.19.10': '>=1.19.10'
