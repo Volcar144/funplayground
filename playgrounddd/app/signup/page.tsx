@@ -77,7 +77,7 @@ export default function SignInPage(){
             name: name,
             email: email,
             password: password,
-            callbackURL: `https://danng-devpg11.vercel.app/callback`
+            callbackURL: `${process.env.NEXT_PUBLIC_APP_URL}/callback`
         },
         {
             onRequest: (ctx) => {
@@ -116,14 +116,12 @@ export default function SignInPage(){
                     email: ctx.data.user.email,
                     name: ctx.data.user.name,
                 });
-                const session = authClient.useSession()
-
-                while(!session.isPending){
-                    Sentry.setUser({
-                        email: session.data?.user.email,
-                        id: session.data?.user.id,
-                    })
-                }
+                
+                Sentry.setUser({
+                    id: ctx.data.user.id,
+                    email: ctx.data.user.email,
+                    name: ctx.data.user.name,
+                })
 
                 Sentry.addBreadcrumb({
                     category: "auth",

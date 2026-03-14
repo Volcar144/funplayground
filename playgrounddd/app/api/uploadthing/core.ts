@@ -6,7 +6,7 @@ import * as Sentry from "@sentry/nextjs";
 
 const f = createUploadthing();
 
-const session = await authClient.getSession();
+
 
 // FileRouter for your app, can contain multiple FileRoutes
 export const ddFileRouter = {
@@ -14,6 +14,7 @@ export const ddFileRouter = {
     image: {maxFileSize:"2MB", maxFileCount:1, minFileCount:1}
   })
   .middleware(async ({ req }) => {
+    const session = await authClient.getSession();
     if(!session){
         throw new UploadThingError("You have to be logged in to do that")
     }

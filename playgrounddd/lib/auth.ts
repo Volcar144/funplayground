@@ -35,7 +35,7 @@ export const auth = betterAuth({
         haveIBeenPwned(),
         nextCookies(),
         // Test-only helpers (factories/login/cookies/OTP capture). Do not use in production.
-        testUtils({ captureOTP: true })
+        process.env.NODE_ENV !== 'production' ? [testUtils({ captureOTP: true })] : []
     ],
 
 

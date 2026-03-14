@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import {Toasty, TooltipProvider} from "@cloudflare/kumo";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { Analytics } from "@vercel/analytics/next"
+import { SpeedInsights } from "@vercel/speed-insights/next"
 import "./globals.css";
 
 import { NextSSRPlugin } from "@uploadthing/react/next-ssr-plugin";
@@ -42,9 +43,10 @@ export default function RootLayout({
         >
           <Toasty>
             <Analytics/>
-              <NextSSRPlugin
+            <NextSSRPlugin
               routerConfig={extractRouterConfig(ddFileRouter)}
             />
+            <SpeedInsights/>
             {children}
           </Toasty>
         </ThemeProvider>  

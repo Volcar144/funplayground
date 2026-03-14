@@ -50,7 +50,7 @@ export default function SignInPage(){
             }
             setSession(data ?? null);
         });
-    })
+    }, [])
     
     useEffect(() =>{
         Sentry.addBreadcrumb({
@@ -65,7 +65,7 @@ export default function SignInPage(){
             }
             Sentry.captureException(new Error("Session not undefined but not true."))
         }
-    })
+    }, [session, router])
 
     
 
@@ -110,7 +110,7 @@ export default function SignInPage(){
             email: email,
             password: password,
             rememberMe: rememeberMe,
-            callbackURL: `https://danng-devpg11.vercel.app/callback`
+            callbackURL: `${process.env.NEXT_PUBLIC_APP_URL}/callback`
         },
         {
             onRequest: (ctx) => {
@@ -151,14 +151,7 @@ export default function SignInPage(){
                     email: context.data.user.email,
                     remember_me: rememeberMe,
                 });
-                const session = authClient.useSession()
-
-                while(!session.isPending){
-                    Sentry.setUser({
-                        email: session.data?.user.email,
-                        id: session.data?.user.id,
-                    })
-                }
+                Sentry.setUser({ email: contex.data.user.email, id: context.data.user.id });
             },
         },
     

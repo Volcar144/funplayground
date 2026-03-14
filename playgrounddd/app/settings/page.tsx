@@ -91,7 +91,7 @@ export default function SettingsPage(){
             user_id: session?.user.id,
         });
 
-        toastManager.promise( changePass(),{
+        await toastManager.promise( changePass(),{
             success: {title: "Success!", description: "Successfully chenged password, please log in again"},
             loading: {title: "Loading", description: "Please wait..."},
             error: {title: "Error!", description:`An error occured while changing your password!`}

@@ -8,7 +8,6 @@ import { WarningCircleIcon } from "@phosphor-icons/react";
 import { authClient } from "@/lib/auth-client";
 import { Suspense } from "react";
 import { CheckCheckIcon } from "lucide-react";
-import { router } from "better-auth/api";
 import { useRouter } from "next/navigation";
 import * as Sentry from "@sentry/nextjs"
 import posthog from "posthog-js";

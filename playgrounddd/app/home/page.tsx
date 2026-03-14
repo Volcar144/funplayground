@@ -9,6 +9,7 @@ type Session = typeof authClient.$Infer.Session;
 import { useRouter } from "next/navigation";
 import { SidebarProvider, SidebarTrigger, SidebarInset } from "@/components/ui/sidebar"
 import { AppSidebar } from "@/components/app-sidebar";
+import { SiteHeader } from "@/components/site-header";
 
 import * as Sentry from "@sentry/nextjs"
 import posthog from "posthog-js";
@@ -61,7 +62,7 @@ export default function HomePage() {
             <AppSidebar />
             <SidebarInset>
                 <main>
-                    <SidebarTrigger />
+                    <SiteHeader></SiteHeader>
                 </main>
             </SidebarInset>
         </SidebarProvider>
