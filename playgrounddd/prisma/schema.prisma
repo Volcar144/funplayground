@@ -85,5 +85,5 @@ model Note {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  
+  @@index([userId])
 }

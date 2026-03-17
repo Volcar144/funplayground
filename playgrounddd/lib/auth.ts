@@ -7,9 +7,7 @@ import { testUtils } from "better-auth/plugins"
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import { PrismaClient } from "@/generated/prisma/client";
 import { PrismaPg } from "@prisma/adapter-pg"
-
-
-const prisma = new PrismaClient({adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL })});
+import { prisma } from "./db";
 
 
 export const auth = betterAuth({
@@ -31,15 +29,5 @@ export const auth = betterAuth({
             await sendOnPasswordReset(user.email);
         },
     },
-    plugins:[
-        haveIBeenPwned(),
-        nextCookies(),
-        // Test-only helpers (factories/login/cookies/OTP capture). Do not use in production.
-        process.env.NODE_ENV !== 'production' ? [testUtils({ captureOTP: true })] : []
-    ],
-
-
-
-
-
+    plugins: process.env.NODE_ENV !== 'production' ? [haveIBeenPwned(),testUtils({ captureOTP: true }), nextCookies()] : [haveIBeenPwned(), nextCookies()],
 });
