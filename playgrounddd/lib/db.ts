@@ -7,6 +7,11 @@
 
     export const prisma = new PrismaClient({ adapter });
 
-    
+    //Cache the instance
+    async function main(){
+      await prisma.user.count;
+    }
+
+    main()
 
     export const PrismaD = Prisma
