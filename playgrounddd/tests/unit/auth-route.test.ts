@@ -10,7 +10,7 @@ const handlerMock = vi.fn(() => ({
 }));
 
 vi.mock('better-auth/next-js', () => ({
-  toNextJsHandler: (...args: any[]) => handlerMock(...args),
+  toNextJsHandler: (...args: any[]) => handlerMock(),
 }));
 
 describe('app/api/auth/[...all]/route', () => {

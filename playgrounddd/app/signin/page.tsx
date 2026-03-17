@@ -151,7 +151,7 @@ export default function SignInPage(){
                     email: context.data.user.email,
                     remember_me: rememeberMe,
                 });
-                Sentry.setUser({ email: contex.data.user.email, id: context.data.user.id });
+                Sentry.setUser({ email: context.data.user.email, id: context.data.user.id });
             },
         },
     
