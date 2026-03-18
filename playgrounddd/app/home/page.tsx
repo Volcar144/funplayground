@@ -12,7 +12,7 @@ import { AppSidebar } from "@/components/app-sidebar";
 import { SiteHeader } from "@/components/site-header";
 
 import * as Sentry from "@sentry/nextjs"
-import posthog from "posthog-js";
+import { useFeatureFlagEnabled } from "posthog-js/react";
 
 
 
@@ -25,11 +25,8 @@ export default function HomePage() {
     const [session, setSession] = useState<Session | null | undefined>(undefined);
     const [ notesEnabled, setNotesEnabled] = useState(false);
 
-    posthog.onFeatureFlags(function() {
-        if (posthog.isFeatureEnabled('betaFunctionaity') ) {
-            setNotesEnabled(true);
-        }
-    })  
+    const betaEnabled = useFeatureFlagEnabled('betaFunctionaity');
+    setNotesEnabled(betaEnabled || false); 
 
     useEffect(() => {
         Sentry.addBreadcrumb({
@@ -62,7 +59,7 @@ export default function HomePage() {
             <AppSidebar />
             <SidebarInset>
                 <main>
-                    <SiteHeader></SiteHeader>
+                    <SiteHeader />
                 </main>
             </SidebarInset>
         </SidebarProvider>
