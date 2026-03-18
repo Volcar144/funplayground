@@ -23,10 +23,7 @@ export default function HomePage() {
     const router = useRouter();
     // undefined = not checked yet, null = checked and _not_ signed in, object = signed in
     const [session, setSession] = useState<Session | null | undefined>(undefined);
-    const [ notesEnabled, setNotesEnabled] = useState(false);
-
     const betaEnabled = useFeatureFlagEnabled('betaFunctionaity');
-    setNotesEnabled(betaEnabled || false); 
 
     useEffect(() => {
         Sentry.addBreadcrumb({
@@ -60,6 +57,7 @@ export default function HomePage() {
             <SidebarInset>
                 <main>
                     <SiteHeader />
+                    {betaEnabled ? <div><p>Feature Flag Enabled</p></div> : <div></div>}
                 </main>
             </SidebarInset>
         </SidebarProvider>

@@ -18,6 +18,15 @@ export default function ResetPasswordPage() {
     const router = useRouter();
     const [token, setToken] = useState<string | null>(null);
     const [errorP, setErrorP] = useState<string | null>(null);
+    const [loading, setLoading] = useState(false);
+    const [email, setEmail] = useState("");
+    const [erorText, setError] = useState("");
+    const [password, setPassword] = useState("");
+
+    function setWrapper(token: string, errorP: string){
+        setToken(token);
+        setErrorP(errorP);
+    }
     
     useEffect(() => {
         Sentry.addBreadcrumb({
@@ -27,8 +36,8 @@ export default function ResetPasswordPage() {
         })
 
         const params = new URLSearchParams(window.location.search);
-        setToken(params.get("token"));
-        setErrorP(params.get("error"));
+
+        setWrapper(params.get("token") || "", params.get("error") || "")
 
         Sentry.addBreadcrumb({
             category: "generic",
@@ -37,10 +46,7 @@ export default function ResetPasswordPage() {
         })
     }, []);
 
-    const [loading, setLoading] = useState(false);
-    const [email, setEmail] = useState("");
-    const [erorText, setError] = useState("");
-    const [password, setPassword] = useState("");
+
 
     
     const [status, setStatus] = useState<'idle' | 'sending' | 'sent'>('idle');

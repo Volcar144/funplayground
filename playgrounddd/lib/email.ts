@@ -12,11 +12,6 @@ const transport = nodemailer.createTransport({
   }
 });
 
-interface User {
-    email: string;
-    [key: string]: any;
-}
-
 export async function sendEmailVerification(email: string, url: string, token: string)  {
     try {
         const info = await transport.sendMail({

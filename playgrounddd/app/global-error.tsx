@@ -19,11 +19,15 @@ export default function GlobalError({
 }) {
 
 
-  const [id, setId] = useState("Undefined")
+  const [id, setId] = useState("404")
+
+  function idWrapper(id: string){
+    setId(id);
+  }
 
   useEffect(() => {
     const id = Sentry.captureException(error);
-    setId(id);
+    idWrapper(id)
 
     posthog.capture("error",{
       sentryId: id,
