@@ -22,9 +22,6 @@ type emitArg = {
 }
 
 export default function log(record: emitArg){
-    logger.emit({
-        body: record.body,
-        severityNumber: 
-    })
+
     
 }
