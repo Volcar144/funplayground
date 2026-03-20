@@ -103,7 +103,7 @@ export async function POST(req: NextRequest){
         }
     })
 
-    const time = await note.updatedAt.toISOString
+    const time = await note.updatedAt.toISOString()
 
     return NextResponse.json({ message: `Success`, id: `${id}`, time: `${time}` }, {status: 200})
 }
