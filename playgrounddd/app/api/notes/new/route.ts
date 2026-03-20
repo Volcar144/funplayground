@@ -103,5 +103,7 @@ export async function POST(req: NextRequest){
         }
     })
 
-    return NextResponse.json({ message: `Success`, id: `${id}`, time: `${note.updatedAt.toString}` }, {status: 200})
+    const time = await note.updatedAt
+
+    return NextResponse.json({ message: `Success`, id: `${id}`, time: `${time}` }, {status: 200})
 }
