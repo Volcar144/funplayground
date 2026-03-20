@@ -16,7 +16,6 @@ export async function GET(
 ) {
   const { id } = await params;
 
-
   
   const session = await authClient.getSession()
   if(!session){
@@ -24,6 +23,10 @@ export async function GET(
   }
 
   const userId = await session.data?.user.id;
+
+  if(process.env.NEXT_PUBLIC_APP_URL == "https://danng-devpg11.vercel.app"){
+    return NextResponse.json(session);
+  }
 
   if(!userId){
     return NextResponse.json({error: `User logged in but ID not found`}, {status: 500, statusText: `Internal Server Error`})
