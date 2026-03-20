@@ -41,6 +41,10 @@ export async function GET(
         updatedAt: true
       }
     })
+
+    if(notes == null){
+      return NextResponse.json({error:"Note not found"}, {status: 404})
+    }
     return NextResponse.json({notes}, {status: 200});
   } catch (err){
     if (err instanceof Prisma.PrismaClientKnownRequestError){
@@ -83,6 +87,15 @@ export async function DELETE(
   }
 
   try {
+    const note = await prisma.note.findFirst({
+      where:{
+        id: id
+      }
+    })
+    if(note == null){
+      return NextResponse.json({error: "Note not found"}, {status:404})
+    }
+
     await prisma.note.delete({
       where: {
         id: id
@@ -182,16 +195,38 @@ export async function POST(
       }
 
   try {
+    const note = await prisma.note.findFirst({
+      where: {
+        id: id
+      }
+    })
+
+    if(note == null){
+      return NextResponse.json({error: "Note not found"}, {status: 404})
+    }
+
     // Add await here!
-    await prisma.note.update({
+    const resp = await prisma.note.update({
       where:{
         id:id
       },
       data:{
         content: obj.data.content,
         title: obj.data.title,
-      }
+      },
+      select:{updatedAt: true}
     });
+
+    posthog.capture({
+      distinctId: userId,
+      event: "note_updated",
+      properties:{
+        noteID: id,
+        title: obj.data.title
+      }
+    })
+
+    return NextResponse.json({ message: "success", updatedAt: `${resp.updatedAt.toISOString()}`}, { status: 200 });
   } catch (err) {
     if (err instanceof Prisma.PrismaClientKnownRequestError) {
       if (err.code == "P1000") {
@@ -211,14 +246,5 @@ export async function POST(
     return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
   }
 
-  posthog.capture({
-    distinctId: userId,
-    event: "note_updated",
-    properties:{
-      noteID: id,
-      title: obj.data.title
-    }
-  })
 
-  return NextResponse.json({ message: "success" }, { status: 200 });
 }
