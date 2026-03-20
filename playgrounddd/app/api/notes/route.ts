@@ -23,6 +23,12 @@ export async function GET(request: Request){
     const notes = await prisma.note.findMany({
         where:{
             userId: userId
+        },
+        select: {
+            id: true,
+            content: true,
+            title: true,
+            updatedAt: true,
         }
     })
     return NextResponse.json({notes}, {status: 200})

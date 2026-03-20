@@ -74,7 +74,7 @@ export async function POST(req: NextRequest){
     const id = uuid();
 
     try {
-        const note = prisma.note.create({
+        const note = await prisma.note.create({
             data: {
                 id: id,
                 userId: userId,
