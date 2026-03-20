@@ -73,13 +73,18 @@ export async function POST(req: NextRequest){
 
     const id = uuid();
 
+    let note
+
     try {
-        const note = await prisma.note.create({
+        note = await prisma.note.create({
             data: {
                 id: id,
                 userId: userId,
                 title: obj.data.title,
                 content: obj.data.content,
+            },
+            select: {
+                updatedAt: true
             }
         })
     } catch (err){
@@ -98,5 +103,5 @@ export async function POST(req: NextRequest){
         }
     })
 
-    return NextResponse.json({ message: `Success`, id: `${id}` }, {status: 200})
+    return NextResponse.json({ message: `Success`, id: `${id}`, time: `${note.updatedAt.toString}` }, {status: 200})
 }
