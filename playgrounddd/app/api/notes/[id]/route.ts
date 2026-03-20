@@ -33,6 +33,12 @@ export async function GET(
   try {
     const notes = prisma.note.findFirst({
       where: {id: id},
+      select: {
+        id: true,
+        title: true,
+        content: true,
+        updatedAt: true
+      }
     })
     return NextResponse.json({notes}, {status: 200});
   } catch (err){
