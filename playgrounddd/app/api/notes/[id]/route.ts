@@ -1,11 +1,11 @@
-
-import { authClient } from "@/lib/auth-client";
 import { NextResponse } from "next/server";
 import { prisma, PrismaD as Prisma} from "@/lib/db"
 import * as sentry from "@sentry/nextjs"
 import * as z from "zod"
 import { newNoteSchema } from "@/lib/schemas";
 import { getPostHogClient } from "@/lib/posthog-server";
+import { headers } from "next/headers";
+import { auth } from "@/lib/auth";
 
 
 const posthog = getPostHogClient();
@@ -16,13 +16,15 @@ export async function GET(
 ) {
   const { id } = await params;
 
+  const session = await auth.api.getSession({
+    headers: await headers()
+  })
   
-  const session = await authClient.getSession()
   if(!session){
       return NextResponse.json({ error: 'Unauthorized' }, { status: 403 })
   }
 
-  const userId = await session.data?.user.id;
+  const userId = await session.user.id;
 
   if(process.env.NEXT_PUBLIC_APP_URL == "https://danng-devpg11.vercel.app"){
     return NextResponse.json(session);
@@ -63,12 +65,14 @@ export async function DELETE(
 ) {
   const { id } = await params;
 
-  const session = await authClient.getSession();
+  const session = await auth.api.getSession({
+    headers: await headers()
+  })
   if (!session) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 403 });
   }
 
-  const userId = await session.data?.user.id; 
+  const userId = await session.user.id; 
 
   if (!userId) {
     sentry.captureException(new Error("User logged in but ID not found"));
@@ -117,12 +121,14 @@ export async function POST(
 ) {
   const { id } = await params;
 
-  const session = await authClient.getSession();
+  const session = await auth.api.getSession({
+    headers: await headers()
+  })
   if (!session) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 403 });
   }
 
-  const userId = session.data?.user.id; // Removed unnecessary await here if session.data is not a Promise
+  const userId = session.user.id; 
 
   if (!userId) {
     sentry.captureException(new Error("User logged in but ID not found"));

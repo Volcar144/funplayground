@@ -1,23 +1,26 @@
 import { NextRequest, NextResponse } from "next/server";
 import { newNoteSchema } from "@/lib/schemas";
 import * as sentry from "@sentry/nextjs"
-import { authClient } from "@/lib/auth-client";
+import { auth } from "@/lib/auth";
 import * as z from "zod"
 import { prisma } from "@/lib/db";
 import { v4 as uuid } from "uuid";
 import { getPostHogClient } from "@/lib/posthog-server";
+import { headers } from "next/headers";
 
 export async function POST(req: NextRequest){
 
     const posthog = getPostHogClient()
 
-    const session = await authClient.getSession();
+    const session = await auth.api.getSession({
+        headers: await headers()
+    })
 
     if(!session){
         return NextResponse.json({error: "Unauthorized"}, {status: 403})
     }
 
-    const userId = await session.data?.user.id;
+    const userId = await session.user.id;
     
     if(!userId){
         sentry.captureException(new Error("User logged in but ID could not be found"))

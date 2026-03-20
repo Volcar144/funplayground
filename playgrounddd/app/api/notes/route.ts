@@ -1,16 +1,18 @@
-import { authClient } from "@/lib/auth-client";
+import { auth } from "@/lib/auth"
 import { NextResponse } from "next/server";
-
 import * as sentry from "@sentry/nextjs"
 import { prisma, PrismaD as Prisma } from "@/lib/db";
+import { headers } from "next/headers";
 
 export async function GET(request: Request){
-  const session = await authClient.getSession()
+  const session = await auth.api.getSession({
+      headers: await headers()
+  })
   if(!session){
       return NextResponse.json({ error: 'Unauthorized' }, { status: 403 })
   }
 
-  const userId = await session.data?.user.id;
+  const userId = session.user.id
 
   if(!userId){
     sentry.captureException(new Error("User logged in but ID not found"))
