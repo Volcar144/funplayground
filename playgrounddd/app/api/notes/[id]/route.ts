@@ -6,6 +6,7 @@ import { newNoteSchema } from "@/lib/schemas";
 import { getPostHogClient } from "@/lib/posthog-server";
 import { headers } from "next/headers";
 import { auth } from "@/lib/auth";
+import { streamToString } from "@/lib/utils";
 
 
 const posthog = getPostHogClient();
@@ -31,7 +32,7 @@ export async function GET(
   }
 
   try {
-    const notes = prisma.note.findFirst({
+    const notes = await prisma.note.findFirst({
       where: {id: id},
       select: {
         id: true,
@@ -137,7 +138,7 @@ export async function POST(
     return NextResponse.json({ error: `User logged in but ID not found` }, { status: 500, statusText: `Internal Server Error` });
   }
 
-  const body = request.json;
+  const body = await streamToString(request.body)
       let parsed: note = {title: "", content: ""}
   
       interface note{
