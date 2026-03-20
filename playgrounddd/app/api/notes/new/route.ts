@@ -7,6 +7,7 @@ import { prisma } from "@/lib/db";
 import { v4 as uuid } from "uuid";
 import { getPostHogClient } from "@/lib/posthog-server";
 import { headers } from "next/headers";
+import { streamToString } from "@/lib/utils"
 
 export async function POST(req: NextRequest){
 
@@ -27,7 +28,7 @@ export async function POST(req: NextRequest){
         return NextResponse.json({error: `User logged in but ID not found`}, {status: 500, statusText: `Internal Server Error`})
     }
 
-    const body = req.json;
+    const body = await streamToString(req.body)
     let parsed: note = {title: "", content: ""}
 
     interface note{
