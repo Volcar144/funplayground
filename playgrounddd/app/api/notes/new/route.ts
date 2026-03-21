@@ -94,7 +94,7 @@ export async function POST(req: NextRequest){
         return NextResponse.json({error: "DB Operation Failed"}, {status: 500})
     }
 
-    posthog.capture({
+    await posthog.capture({
         distinctId: userId,
         event: "note_created",
         properties:{

@@ -177,7 +177,7 @@ export async function POST(
               userId: userId
           })
   
-          return NextResponse.json({error: "Failed to parse JSON object"}, { status: 500 })
+          return NextResponse.json({error: "Failed to parse JSON object due to invalid request body"}, { status: 400 })
           
       }
 
