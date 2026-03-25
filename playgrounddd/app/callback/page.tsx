@@ -71,7 +71,7 @@ export default function CallbackPage() {
                             </CardHeader>
                             <CardContent>
                                 <p className="text-gray-700 dark:text-gray-300">{errorP}</p>
-                                <div className="flex flex-grid gap-3">
+                                <div className="flex flex-grid gap-6">
                                     <p>Error ID: </p>
                                     <ClipboardText text={EID}/>
                                 </div>

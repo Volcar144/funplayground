@@ -16,7 +16,7 @@ import { CheckCircleIcon, WarningCircleIcon } from "@phosphor-icons/react"
 import { authClient } from "@/lib/auth-client";
 import * as Sentry from "@sentry/nextjs"
 import posthog from "posthog-js";
-
+import { DotLottieReact } from '@lottiefiles/dotlottie-react';
 
 
 export default function SignInPage(){
@@ -139,7 +139,10 @@ export default function SignInPage(){
             <div>
                 <main className="flex flex-col items-center justify-center min-h-screen w-full bg-zinc-50 font-sans dark:bg-black">
 
-                    <CheckCircleIcon color="green" size={64}/>
+                    <DotLottieReact 
+                        src="checkmark.lottie"
+                        autoplay
+                    />
                     <Card className="w-full max-w-sm shadow-sm">
                         <CardHeader>
                             <CardTitle>Success!</CardTitle>

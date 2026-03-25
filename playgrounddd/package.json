@@ -20,6 +20,7 @@
   "dependencies": {
     "@better-auth/prisma-adapter": "^1.5.5",
     "@cloudflare/kumo": "^1.7.0",
+    "@lottiefiles/dotlottie-react": "^0.18.7",
     "@opentelemetry/api-logs": "^0.213.0",
     "@opentelemetry/exporter-logs-otlp-http": "^0.213.0",
     "@opentelemetry/exporter-trace-otlp-http": "^0.213.0",

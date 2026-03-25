@@ -20,6 +20,9 @@ importers:
       '@cloudflare/kumo':
         specifier: ^1.7.0
         version: 1.7.0(@emotion/is-prop-valid@1.4.0)(@phosphor-icons/react@2.1.10(react-dom@19.2.3(react@19.2.3))(react@19.2.3))(@types/react@19.2.14)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)(zod@4.3.6)
+      '@lottiefiles/dotlottie-react':
+        specifier: ^0.18.7
+        version: 0.18.7(react@19.2.3)
       '@opentelemetry/api-logs':
         specifier: ^0.213.0
         version: 0.213.0
@@ -1169,6 +1172,14 @@ packages:
     engines: {node: '>=18'}
     peerDependencies:
       '@langchain/core': '>=0.2.21 <0.4.0'
+
+  '@lottiefiles/dotlottie-react@0.18.7':
+    resolution: {integrity: sha512-aEUS3GR7U3ldT74Xt4l1pPz5KfY4IOXM30e4LMChXH2qNcwy3PZdoT7i44jf+vV+qgEffXshAAepVAZD6XZmTw==}
+    peerDependencies:
+      react: ^17 || ^18 || ^19
+
+  '@lottiefiles/dotlottie-web@0.67.0':
+    resolution: {integrity: sha512-XdMbVQAKqI8NLGqwN1RYQv0eGDM74JhISJFOovBf7k2Uh5B3QJwMOYhMqz8L0UZAs+LzXYdP/wZR7s8hh0uo2g==}
 
   '@modelcontextprotocol/sdk@1.27.1':
     resolution: {integrity: sha512-sr6GbP+4edBwFndLbM60gf07z0FQ79gaExpnsjMGePXqFcSSb7t6iscpjk9DhFhwd+mTEQrzNafGP8/iGGFYaA==}
@@ -8692,6 +8703,13 @@ snapshots:
     dependencies:
       '@langchain/core': 0.3.80(@opentelemetry/api@1.9.0)(@opentelemetry/exporter-trace-otlp-proto@0.213.0(@opentelemetry/api@1.9.0))(@opentelemetry/sdk-trace-base@2.6.0(@opentelemetry/api@1.9.0))(openai@5.12.2(ws@8.19.0)(zod@4.3.6))
       js-tiktoken: 1.0.21
+
+  '@lottiefiles/dotlottie-react@0.18.7(react@19.2.3)':
+    dependencies:
+      '@lottiefiles/dotlottie-web': 0.67.0
+      react: 19.2.3
+
+  '@lottiefiles/dotlottie-web@0.67.0': {}
 
   '@modelcontextprotocol/sdk@1.27.1(@cfworker/json-schema@4.1.1)(zod@3.25.76)':
     dependencies:
