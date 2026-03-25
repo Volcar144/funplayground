@@ -47,19 +47,8 @@ export default function HomePage() {
     }, [session, router]);
 
     return (
-        <SidebarProvider   style={
-    {
-      "--sidebar-width": "20rem",
-      "--sidebar-width-mobile": "20rem",
-    } as React.CSSProperties
-  }>
-            <AppSidebar />
-            <SidebarInset>
-                <main>
-                    <SiteHeader />
-                    {betaEnabled ? <div><p>Feature Flag Enabled</p></div> : <div></div>}
-                </main>
-            </SidebarInset>
-        </SidebarProvider>
+        <main>
+            {betaEnabled ? <div><p>Feature Flag Enabled</p></div> : <div></div>}
+        </main>
     )
 }

@@ -36,8 +36,6 @@ type AutoBreadcrumbsProps = {
 }
 
 export function AutoBreadcrumbs({
-  rootLabel = "Home",
-  rootHref = "/",
   hideSegments = [],
 }: AutoBreadcrumbsProps) {
   const pathname = usePathname() || "/"
@@ -59,12 +57,6 @@ export function AutoBreadcrumbs({
   return (
     <Breadcrumb>
       <BreadcrumbList>
-        {/* Root */}
-        <BreadcrumbItem>
-          <BreadcrumbLink asChild>
-            <Link href={rootHref}>{rootLabel}</Link>
-          </BreadcrumbLink>
-        </BreadcrumbItem>
 
         {crumbs.map((c, idx) => {
           const isLast = idx === crumbs.length - 1

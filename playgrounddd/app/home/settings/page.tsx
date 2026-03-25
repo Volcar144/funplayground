@@ -8,7 +8,7 @@ import { authClient } from "@/lib/auth-client"
 import { useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { error } from "console"
-import GlobalError from "../global-error"
+import GlobalError from "@/app/global-error"
 import { Card, CardHeader, CardTitle, CardContent, CardFooter } from "@/components/ui/card"
 
 import * as Sentry from "@sentry/nextjs"
