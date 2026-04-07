@@ -157,11 +157,11 @@ export function AppSidebar() {
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
-              <DropdownMenuItem>
+              <DropdownMenuItem onClick={() => {window.location.href == `/user/ ${user?.id}`}}>
                 <UserCircleIcon />
                 Profile
               </DropdownMenuItem>
-              <DropdownMenuItem>
+              <DropdownMenuItem onClick={() => {window.location.href == "/dashboard/settings"}}>
                 <SettingsIcon />
                 Settings
               </DropdownMenuItem>
