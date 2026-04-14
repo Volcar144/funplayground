@@ -30,7 +30,6 @@
     "@opentelemetry/sdk-trace-node": "^2.6.0",
     "@opentelemetry/semantic-conventions": "^1.40.0",
     "@phosphor-icons/react": "^2.1.10",
-    "@qodo/command": "^0.36.0",
     "@sentry/nextjs": "^10.42.0",
     "@uploadthing/react": "^7.3.3",
     "@vercel/analytics": "^1.6.1",

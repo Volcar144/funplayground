@@ -16,6 +16,8 @@ export default function NotesPage() {
     const [data, setData] = useState<Response>(new Response( null, {status: 500} ) );
     const params = useParams<{ slug: string }>();
 
+    console.log(`Fetching note with id: ${params.slug}`)
+
     useEffect(() => {
         const fetchData = async () => {
             const data = await fetch(`${process.env.NEXT_PUBLIC_APP_URL ?? 'http://localhost:3000'}/api/notes/${params.slug}`);
