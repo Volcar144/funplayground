@@ -10,14 +10,12 @@ export const metadata: Metadata = {
   description: "DD Playground home",
 };
 
-export default function RootLayout({
+export default function DashboardLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body>
         <SidebarProvider   style={
             {
             "--sidebar-width": "20rem",
@@ -32,7 +30,5 @@ export default function RootLayout({
                 </main>
             </SidebarInset>
         </SidebarProvider>
-      </body>
-    </html>
   );
 }

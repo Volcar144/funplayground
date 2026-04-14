@@ -19,7 +19,7 @@ import posthog from "posthog-js";
 import { DotLottieReact } from '@lottiefiles/dotlottie-react';
 
 
-export default function SignInPage(){
+export default function SignUpPage(){
     const toastManager = useKumoToastManager();
 
     const [email, setEmail] = useState("");
@@ -72,7 +72,7 @@ export default function SignInPage(){
             setDisabled(false);
             return;
         }
-        
+
         const { data, error } = await authClient.signUp.email({
             name: name,
             email: email,
@@ -139,10 +139,7 @@ export default function SignInPage(){
             <div>
                 <main className="flex flex-col items-center justify-center min-h-screen w-full bg-zinc-50 font-sans dark:bg-black">
 
-                    <DotLottieReact 
-                        src="checkmark.lottie"
-                        autoplay
-                    />
+                    <CheckCircleIcon size={128} color="green" weight="fill"/>
                     <Card className="w-full max-w-sm shadow-sm">
                         <CardHeader>
                             <CardTitle>Success!</CardTitle>

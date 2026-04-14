@@ -30,4 +30,5 @@ export const auth = betterAuth({
         },
     },
     plugins: process.env.NODE_ENV !== 'production' ? [haveIBeenPwned(),testUtils({ captureOTP: true }), nextCookies()] : [haveIBeenPwned(), nextCookies()],
+    baseURL: process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000",
 });
