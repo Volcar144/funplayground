@@ -4,9 +4,10 @@ import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardContent, CardFooter } from "@/components/ui/card"
 import { noteResponseSchema } from "@/lib/schemas"
 import { Suspense, useEffect, useState } from "react"
-import { DotLottieReact } from '@lottiefiles/dotlottie-react';
+
 import { WarningCircleIcon } from "@phosphor-icons/react/dist/icons/WarningCircle";
 import GlobalError from "@/app/global-error";
+import * as z from "zod"
 
 export default function NotesPage({
   params,
@@ -68,7 +69,20 @@ export default function NotesPage({
     }
 
     
-    const note = noteResponseSchema.parse( data )
+    const note = noteResponseSchema.safeParse(data);
+
+    if(!note.success){
+        return (
+            <main>
+                <div className="flex flex-col w-full min-h-screen items-center justify-center align-center bg-zinc:50 font-sans dark:bg-black:100">
+                    <GlobalError error={new Error(`An unexpected error has occured while parsing the note: ${z.prettifyError(note.error)}`)} >
+                        <Button variant={"link"} className="w-full" onClick={() => {window.location.href = "/dashboard/notes"}}>Go back to notes</Button>
+                        <Button variant={"link"} className="w-full" onClick={() => {window.location.href = "/dashboard"}}>Go home</Button>
+                    </GlobalError>
+                </div>
+            </main>
+        )
+    } 
 
     return (
         <main>
@@ -76,9 +90,9 @@ export default function NotesPage({
                 <Suspense>
                     <Card>
                     <CardHeader>
-                        <CardTitle>{note.title}</CardTitle>
+                        <CardTitle>{note.data.title}</CardTitle>
                     </CardHeader>
-                    <CardContent></CardContent>
+                    <CardContent>{note.data.content}</CardContent>
                 </Card>
                 </Suspense>
             </div>
