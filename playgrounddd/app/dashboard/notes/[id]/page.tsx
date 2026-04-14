@@ -53,7 +53,7 @@ export default function NotesPage({
         )
     }
 
-    if(!data.ok){
+    if(data.status >= 400){
         <main>
                 <div className="flex flex-col w-full min-h-screen items-center justify-center align-center bg-zinc:50 font-sans dark:bg-black:100">
                     <Suspense>
