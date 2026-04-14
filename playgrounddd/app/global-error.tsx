@@ -1,8 +1,8 @@
 "use client";
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { ClipboardText } from "@cloudflare/kumo";
-import { WarningOctagonIcon } from "@phosphor-icons/react";
+import { WarningCircleIcon } from "@phosphor-icons/react";
 import * as Sentry from "@sentry/nextjs";
 import NextError from "next/error";
 import { useEffect } from "react";
@@ -13,9 +13,10 @@ import * as z from "zod"
 
 export default function GlobalError({
   
-  error,
+  error, children
 }: {
   error: Error & { digest?: string };
+  children?: React.ReactNode;
 }) {
 
 
@@ -42,7 +43,7 @@ export default function GlobalError({
       <body>
         <div>
           <main className="flex flex-col gap-6 max-w-full min-h-screen bg-zinc-50 font-sans items-center justify-center dark:bg-black">
-            <WarningOctagonIcon size={64} color="red" />
+            <WarningCircleIcon size={64} color="red" />
             <Card>
               <CardHeader>
                 <CardTitle>Error!</CardTitle>
@@ -57,6 +58,11 @@ export default function GlobalError({
                   </div>
                 </div>
               </CardContent>
+              <CardFooter>
+                <div className="flex flex-grid gap-3">
+                  {children}
+                </div>
+              </CardFooter>
             </Card>
           </main>
         </div>
