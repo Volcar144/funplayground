@@ -5,22 +5,23 @@ import { Card, CardHeader, CardTitle, CardContent, CardFooter } from "@/componen
 import { noteResponseSchema } from "@/lib/schemas"
 import { Suspense, useEffect, useState } from "react"
 
+import { useParams } from 'next/navigation'
+
 import { WarningCircleIcon } from "@phosphor-icons/react/dist/icons/WarningCircle";
 import GlobalError from "@/app/global-error";
 import * as z from "zod"
 
-export default function NotesPage({
-  params,
-}: {
-  params: Promise<{ slug: string }>
-}) {
+export default function NotesPage() {
 
     const [data, setData] = useState<Response>(new Response( null, {status: 500} ) );
+    const params = useParams<{ slug: string }>();
 
     useEffect(() => {
         const fetchData = async () => {
-            const data = await fetch(`${process.env.NEXT_PUBLIC_APP_URL ?? 'http://localhost:3000'}/api/notes/${(await params).slug}`);
+            const data = await fetch(`${process.env.NEXT_PUBLIC_APP_URL ?? 'http://localhost:3000'}/api/notes/${params.slug}`);
             setData(data);
+            console.log(`Fetched data: `)
+            console.log(data)
         };
         fetchData();
     }, [])
