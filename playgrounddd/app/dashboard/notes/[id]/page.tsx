@@ -14,19 +14,37 @@ import * as z from "zod"
 export default function NotesPage() {
 
     const [data, setData] = useState<Response>(new Response( null, {status: 500} ) );
+    const [error, setError] = useState<Error | null>(null);
     const params = useParams<{ id: string }>();
 
     console.log(`Fetching note with id: ${params.id}`)
 
     useEffect(() => {
-        const fetchData = async () => {
-            const data = await fetch(`${process.env.NEXT_PUBLIC_APP_URL ?? 'http://localhost:3000'}/api/notes/${params.id}`);
-            setData(data);
-            console.log(`Fetched data: `)
-            console.log(data)
-        };
-        fetchData();
+        try {
+            const fetchData = async () => {
+                const data = await fetch(`${process.env.NEXT_PUBLIC_APP_URL ?? 'http://localhost:3000'}/api/notes/${params.id}`);
+                setData(data);
+                console.log(`Fetched data: `)
+                console.log(data)
+            };
+            fetchData();
+        } catch (err) {
+            setError(err as Error);
+        }
     }, [])
+
+    if(error){
+        return (
+            <main>
+                <div className="flex flex-col w-full min-h-screen items-center justify-center align-center bg-zinc:50 font-sans dark:bg-black:100">
+                    <GlobalError error={error} >
+                        <Button variant={"link"} className="w-full" onClick={() => {window.location.href = "/dashboard/notes"}}>Go back to notes</Button>
+                        <Button variant={"link"} className="w-full" onClick={() => {window.location.href = "/dashboard"}}>Go home</Button>
+                    </GlobalError>
+                </div>
+            </main>
+        )
+    }
 
 
     console.log(data)

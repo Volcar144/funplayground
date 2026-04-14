@@ -4,38 +4,26 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { ClipboardText } from "@cloudflare/kumo";
 import { WarningCircleIcon } from "@phosphor-icons/react";
 import * as Sentry from "@sentry/nextjs";
-import NextError from "next/error";
-import { useEffect } from "react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import posthog from "posthog-js";
-import * as z from "zod"
-
 
 export default function GlobalError({
-  
-  error, children
+  error,
+  children
 }: {
   error: Error & { digest?: string };
   children?: React.ReactNode;
 }) {
-
-
-  const [id, setId] = useState("404")
-
-  function idWrapper(id: string){
-    setId(id);
-  }
+  const [id, setId] = useState<string | null>(null);
 
   useEffect(() => {
-    const id = Sentry.captureException(error);
-    idWrapper(id)
+    const sentryId = Sentry.captureException(error);
+    setId(sentryId);
 
-    posthog.capture("error",{
-      sentryId: id,
+    posthog.capture("error", {
+      sentryId,
       error: error
-    })
-
-    
+    });
   }, [error]);
 
   return (
@@ -47,19 +35,21 @@ export default function GlobalError({
             <Card>
               <CardHeader>
                 <CardTitle>Error!</CardTitle>
-                <CardDescription>An error has occured!</CardDescription>
+                <CardDescription>An error has occurred!</CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="flex flex-col gap-3">
-                  <p>An unexpected error has occured: {error.message}</p>
-                  <div className="flex flex-grid gap-2">
-                    <p>Distinct Id: </p>
-                    <ClipboardText text={id}/>
-                  </div>
+                  <p>An unexpected error has occurred: {error.message}</p>
+                  {id && (
+                    <div className="flex flex-row gap-2 items-center">
+                      <p>Incident ID:</p>
+                      <ClipboardText text={id} />
+                    </div>
+                  )}
                 </div>
               </CardContent>
               <CardFooter>
-                <div className="flex flex-grid gap-3">
+                <div className="flex flex-row gap-3">
                   {children}
                 </div>
               </CardFooter>
