@@ -31,4 +31,9 @@ export const auth = betterAuth({
     },
     plugins: process.env.NODE_ENV !== 'production' ? [haveIBeenPwned(),testUtils({ captureOTP: true }), nextCookies()] : [haveIBeenPwned(), nextCookies()],
     baseURL: process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000",
+    trustedOrigins:[
+        "https://danng-devpg11.vercel.app",
+        "http://localhost:3000",
+        "https://danng-dev-add-ui.vercel.app"
+    ]
 });

@@ -11,6 +11,7 @@ import { CheckCheckIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
 import * as Sentry from "@sentry/nextjs"
 import posthog from "posthog-js";
+import GlobalError from "../global-error";
 
 
 export default function ResetPasswordPage() {
@@ -79,22 +80,9 @@ export default function ResetPasswordPage() {
         
         return (
             <div className="flex flex-col justify-center items-center bg-zinc-50 min-h-screen w-full font-sans dark:bg-black">
-                <main className="flex flex-col items-center gap-6">
-                    <div className="animate-spin">
-                        <WarningCircleIcon size={64} color="red" weight="fill" />
-                    </div>
-                    <Card className="w-full max-w-md">
-                        <CardHeader>
-                            <CardTitle className="text-red-600">Error</CardTitle>
-                        </CardHeader>
-                        <CardContent>
-                            <p className="text-gray-700 dark:text-gray-300">{errorP}. Id: {EID}</p>
-                        </CardContent>
-                        <CardFooter>
-                            <Button className="w-full" onClick={() => { window.location.href = "/signin" }}>Back to Sign In</Button>
-                        </CardFooter>
-                    </Card>
-                </main>
+                <GlobalError error={new Error(errorP)}>
+                    <Button className="w-full" onClick={() => { window.location.href = "/signin" }}>Back to Sign In</Button>
+                </GlobalError>
             </div>
         )
     }
@@ -114,7 +102,7 @@ export default function ResetPasswordPage() {
 
         const { data, error } = await authClient.requestPasswordReset({
             email: email,
-            redirectTo: "https://danng-devpg11.vercel.app/reset-password"
+            redirectTo: `${process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"}/reset-password`
         })
 
         setLoading(false);
