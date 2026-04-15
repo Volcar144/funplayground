@@ -11,11 +11,13 @@ import { WarningCircleIcon } from "@phosphor-icons/react/dist/icons/WarningCircl
 import GlobalError from "@/app/global-error";
 import * as z from "zod"
 
+import { Skeleton } from "@/components/ui/skeleton"
+
 type NoteData = {
     id: string;
     title: string;
     content: string;
-    updatedAt: string;
+    updatedAt: Date;
 } | null;
 
 type FetchState = {
@@ -85,7 +87,18 @@ export default function NotesPage() {
         return (
             <main>
                 <div className="flex flex-col w-full min-h-screen items-center justify-center align-center bg-zinc:50 font-sans dark:bg-black:100">
-                    <p>Loading...</p>
+                    <Card>
+                        <CardHeader>
+                            <CardTitle><p>Loading...</p></CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                            <div className="flex w-ful max-w-xs flex-col gap-2">
+                                <Skeleton className="h-4 w-full" />
+                                <Skeleton className="h-4 w-full mt-2" />
+                                <Skeleton className="h-4 w-full mt-2" />
+                            </div>
+                        </CardContent>
+                    </Card>
                 </div>
             </main>
         )
