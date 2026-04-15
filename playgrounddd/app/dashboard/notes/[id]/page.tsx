@@ -10,6 +10,7 @@ import { useParams } from 'next/navigation'
 import { WarningCircleIcon } from "@phosphor-icons/react/dist/icons/WarningCircle";
 import GlobalError from "@/app/global-error";
 import * as z from "zod"
+import * as Sentry from "@sentry/nextjs";
 
 import { Skeleton } from "@/components/ui/skeleton"
 
@@ -47,7 +48,12 @@ export default function NotesPage() {
                     // API returns { notes: { id, title, content, updatedAt } }
                     const json = await response.json();
                     setFetchState({
-                        data: json.notes,
+                        data: {
+                            id: json.notes.id,
+                            title: json.notes.title,
+                            content: json.notes.content,
+                            updatedAt: new Date(json.notes.updatedAt) // Had to parse like this to prevent the date from becoming a String
+                        },
                         status: response.status,
                         isLoading: false
                     });
@@ -63,6 +69,7 @@ export default function NotesPage() {
             } catch (err) {
                 console.error("Error fetching note:", err);
                 setError(err as Error);
+                Sentry.captureException(err);
                 setFetchState(prev => ({ ...prev, isLoading: false }));
             }
         };
@@ -107,7 +114,7 @@ export default function NotesPage() {
     if(fetchState.status === 404){
         return (
             <main>
-                <div className="flex flex-col w-full min-h-screen items-center justify-center align-center bg-zinc:50 font-sans dark:bg-black:100">
+                <div className="flex flex-col w-full min-h-screen max-w-2xl items-center justify-center align-center bg-zinc:50 font-sans dark:bg-black:100">
                     <WarningCircleIcon size={64} color="red" />
                     <Card>
                         <CardHeader>
@@ -117,7 +124,7 @@ export default function NotesPage() {
                             <p>You may have picked up the wrong piece of paper!</p>
                         </CardContent>
                         <CardFooter>
-                            <div className="flex flex-grid gap-3">
+                            <div className="flex flex-grid gap-2">
                                 <Button variant={"link"} className="w-full" onClick={() => {window.location.href = "/dashboard"}}>Go home</Button>
                                 <Button variant={"link"} className="w-full" onClick={() => {window.location.href = "/dashboard/notes"}}>Go back to notes</Button>
                             </div>
@@ -131,7 +138,7 @@ export default function NotesPage() {
     if(fetchState.status >= 400){
         return (
             <main>
-                <div className="flex flex-col w-full min-h-screen items-center justify-center align-center bg-zinc:50 font-sans dark:bg-black:100">
+                <div className="flex flex-col w-full min-h-screen max-w-2xl items-center justify-center align-center bg-zinc:50 font-sans dark:bg-black:100">
                     <GlobalError error={new Error(`An unexpected error has occurred while fetching the note. Status: ${fetchState.status}`)} >
                         <Button variant={"link"} className="w-full" onClick={() => {window.location.href = "/dashboard/notes"}}>Go back to notes</Button>
                         <Button variant={"link"} className="w-full" onClick={() => {window.location.href = "/dashboard"}}>Go home</Button>
@@ -147,7 +154,7 @@ export default function NotesPage() {
     if(!note.success){
         return (
             <main>
-                <div className="flex flex-col w-full min-h-screen items-center justify-center align-center bg-zinc:50 font-sans dark:bg-black:100">
+                <div className="flex flex-col w-full min-h-screen max-w-2xl items-center justify-center align-center bg-zinc:50 font-sans dark:bg-black:100">
                     <GlobalError error={new Error(`An unexpected error has occurred while parsing the note: ${z.prettifyError(note.error)}`)} >
                         <Button variant={"link"} className="w-full" onClick={() => {window.location.href = "/dashboard/notes"}}>Go back to notes</Button>
                         <Button variant={"link"} className="w-full" onClick={() => {window.location.href = "/dashboard"}}>Go home</Button>
