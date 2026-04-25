@@ -19,6 +19,13 @@ export const auth = betterAuth({
             await sendEmailVerification(user.email, url, token)
         },
     },
+    socialProviders: {
+        google: { 
+            prompt: "select_account", 
+            clientId: process.env.GOOGLE_CLIENT_ID as string, 
+            clientSecret: process.env.GOOGLE_CLIENT_SECRET as string, 
+        }, 
+    },
     emailAndPassword:{
         enabled:true,
         requireEmailVerification: true,
