@@ -26,7 +26,7 @@ import { useTheme } from 'next-themes';
 import { FcGoogle } from "react-icons/fc";
 import { authClient } from "@/lib/auth-client"
 
-export function SignUpForm(){
+export function SignInForm(){
     
     const {theme, setTheme} = useTheme();
 

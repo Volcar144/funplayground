@@ -1,8 +1,8 @@
 import { betterAuth } from "better-auth";
 import {Pool} from "pg"
-import { haveIBeenPwned } from "better-auth/plugins"
+import { haveIBeenPwned, emailOTP } from "better-auth/plugins"
 import { nextCookies } from "better-auth/next-js";
-import { sendEmailVerification, sendOnPasswordReset, sendPasswordReset } from "./email";
+import { sendEmailOTP, sendEmailVerification, sendOnPasswordReset, sendPasswordReset } from "./email";
 import { testUtils } from "better-auth/plugins"
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import { PrismaClient } from "@/generated/prisma/client";
@@ -36,7 +36,23 @@ export const auth = betterAuth({
             await sendOnPasswordReset(user.email);
         },
     },
-    plugins: process.env.NODE_ENV !== 'production' ? [haveIBeenPwned(),testUtils({ captureOTP: true }), nextCookies()] : [haveIBeenPwned(), nextCookies()],
+    plugins: process.env.NODE_ENV !== 'production' ? [haveIBeenPwned(),testUtils({ captureOTP: true }), nextCookies(), emailOTP({ 
+            async sendVerificationOTP({ email, otp, type }) { 
+                if(type === "email-verification"){
+                    await sendEmailOTP(email, otp);
+                } else {
+                    console.log("Invalid type when getting an OTP for: " + otp)
+                }
+            }, 
+        }) ] : [haveIBeenPwned(), nextCookies(), emailOTP({ 
+            async sendVerificationOTP({ email, otp, type }) { 
+                if(type === "email-verification"){
+                    await sendEmailOTP(email, otp);
+                } else {
+                    console.log("Invalid type when getting an OTP for: " + otp)
+                }
+            }, 
+        }) ],
     baseURL: process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000",
     trustedOrigins:[
         "https://danng-devpg11.vercel.app",

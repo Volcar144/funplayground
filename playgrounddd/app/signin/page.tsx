@@ -10,7 +10,6 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Button, Label, Input, Checkbox, useKumoToastManager } from "@cloudflare/kumo";
-import { EmailSyntax } from 'email-syntax';
 import { useEffect, useState } from "react";
 import { WarningCircleIcon } from "@phosphor-icons/react"
 import { authClient } from "@/lib/auth-client";
@@ -20,7 +19,7 @@ import * as Sentry from "@sentry/nextjs"
 import { useRouter } from "next/navigation";
 import posthog from "posthog-js";
 import ThemeToggle from "@/components/ThemeToggle";
-import { SignUpForm } from "@/components/login-form";
+import { SignInForm } from "@/components/login-form";
 import Image from "next/image";
 
 
@@ -69,7 +68,7 @@ export default function SignInPage(){
         <main>
             <div className="flex  min-h-screen max-width w-full bg-white-100 font-sans dark:bg-black-100 dark:text-white-50">
                 <div className="flex flex-col min-h-screen max-width bg-zinc-100 w-full md:w-5/12">
-                    <SignUpForm />
+                    <SignInForm />
                 </div>
                 <div className="flex w-0 md:w-7/12 bg-orange-50 relative overflow-hidden invisible md:visible">
                     <Image 

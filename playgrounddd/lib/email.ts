@@ -62,6 +62,56 @@ export async function sendEmailVerification(email: string, url: string, token: s
     }
 
 }
+export async function sendEmailOTP(email: string, otp: string)  {
+    try {
+        const info = await transport.sendMail({
+            from: '"DanngDev Playground" <noreply@archiem.top>',
+            to: email,
+            subject:"Your One-Time code.",
+            html:
+            `
+            <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #f9f9f9;">
+                <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 30px; border-radius: 8px 8px 0 0; text-align: center;">
+                    <h1 style="color: white; margin: 0; font-size: 28px;">Verify Your Email</h1>
+                </div>
+                
+                <div style="background-color: white; padding: 30px; border-radius: 0 0 8px 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                    <p style="color: #333; font-size: 16px; margin-bottom: 20px;">Welcome to DanngDev Playground!</p>
+                    
+                    <p style="color: #666; font-size: 14px; line-height: 1.6; margin-bottom: 30px;">
+                        Please verify your email address by entering the code below. This code will expire in 10 minutes.
+                    </p>
+                    
+                    <div style="text-align: center; margin: 30px 0;">
+                        <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 20px; border-radius: 8px; font-weight: bold; display: inline-block; font-size: 24px; letter-spacing: 4px; font-family: monospace;">
+                            ${otp}
+                        </div>
+                    </div>
+                    
+                    <p style="color: #999; font-size: 12px; margin-top: 30px; padding-top: 20px; border-top: 1px solid #eee;">
+                        Enter this code in the verification field. Do not share this code with anyone.
+                    </p>
+                    
+                </div>
+                <a href="__unsubscribe_url__">Unsubscribe?</a>
+            </div> `,
+            text:
+            `Verify Your Email
+
+            Welcome to DanngDev Playground!
+
+            Please verify your email address by entering the code below. This code will expire in 10 minutes.
+
+            Verification Code: ${otp}
+
+            Enter this code in the verification field. Do not share this code with anyone.`
+            
+        });
+    } catch (err){
+        console.error("Email verification failed:", err);
+    }
+
+}
 
 export async function sendPasswordReset(email: string, url: string, token: string): Promise<void> {
     try {
