@@ -79,10 +79,6 @@ export function SignUpForm(){
                 password: input.password
             }, {
                 onError(ctx) {
-                    form.setError("name", {
-                        type: "custom",
-                        message: ctx.error.message,
-                    })
                 },
             })
             setSuccess(true);
@@ -293,7 +289,7 @@ export function SignUpForm(){
                         </FieldGroup>
                     </form>
                     <Field orientation={"vertical"} className="p-2">
-                        <Button type="submit" form="form-signin" >
+                        <Button type="submit" form="form-signup" >
                             <EnvelopeIcon size={16} />
                             Sign up
                         </Button>
