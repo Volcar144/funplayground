@@ -77,6 +77,13 @@ export function SignUpForm(){
                 name: input.name,
                 email: input.email,
                 password: input.password
+            }, {
+                onError(ctx) {
+                    form.setError("name", {
+                        type: "custom",
+                        message: ctx.error.message,
+                    })
+                },
             })
             setSuccess(true);
             authClient.emailOtp.sendVerificationOtp({
