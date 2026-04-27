@@ -150,7 +150,7 @@ export function SignUpForm(){
                                     
                                     <Field data-invalid={fieldState.invalid}>
                                         <FieldLabel htmlFor="form-otp-code">Verification Code</FieldLabel>
-                                        <InputOTP value={field.value} onChange={field.onChange} onBlur={field.onBlur} aria-invalid={fieldState.invalid} ref={field.ref} name={field.name} disabled={field.disabled} maxLength={6} id="form-otp-code" pattern={REGEXP_ONLY_DIGITS} required>
+                                        <InputOTP value={field.value} onChange={(value) => field.onChange(value)} onBlur={field.onBlur} aria-invalid={fieldState.invalid} maxLength={6} id="form-otp-code" pattern={REGEXP_ONLY_DIGITS} required>
                                             <InputOTPGroup>
                                                 <InputOTPSlot index={0} />
                                                 <InputOTPSlot index={1} />
