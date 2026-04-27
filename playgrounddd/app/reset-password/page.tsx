@@ -3,7 +3,6 @@
 import { Card, CardAction, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button, Input } from "@cloudflare/kumo";
 import { useEffect, useState } from "react";
-import { EmailSyntax } from 'email-syntax';
 import { WarningCircleIcon } from "@phosphor-icons/react";
 import { authClient } from "@/lib/auth-client";
 import { Suspense } from "react";
@@ -91,12 +90,6 @@ export default function ResetPasswordPage() {
 
         setLoading(true);
         setError("");
-
-        if (!EmailSyntax.validate(email)) {
-            setError("Invalid Email");
-            setLoading(false);
-            return;
-        }
 
         setStatus('sending');
 
