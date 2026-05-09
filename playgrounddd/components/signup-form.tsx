@@ -33,12 +33,15 @@ import {
 } from "@/components/ui/input-otp"
 import { REGEXP_ONLY_DIGITS } from "input-otp"
 import { useRouter } from "next/navigation"
+import { Label } from "radix-ui"
 
 export function SignUpForm(){
     
     const {theme, setTheme} = useTheme();
     const [success, setSuccess] = useState(false);
     const [email, setEmail] = useState("");
+    const [otpError, setOtpError] = useState("");
+    const [otp, setOtp] = useState("");
 
     const router = useRouter()
 
@@ -49,13 +52,6 @@ export function SignUpForm(){
             email: "",
             password:"",
             passwordConfirm:""
-        }
-    })
-
-    const otp = useForm<z.infer<typeof otpSchema>>({
-        resolver: zodResolver( otpSchema ),
-        defaultValues: {
-            code: ""
         }
     })
 
@@ -79,6 +75,7 @@ export function SignUpForm(){
                 password: input.password
             }, {
                 onError(ctx) {
+                    setOtpError(ctx.error.message);
                 },
             })
             setSuccess(true);
@@ -93,30 +90,24 @@ export function SignUpForm(){
         
     }
 
-    async function otpSumbit(input: z.infer<typeof otpSchema>){
+    async function otpSumbit(){
         await authClient.emailOtp.checkVerificationOtp({
             email: email,
-            otp: input.code,
+            otp: otp,
             type: "email-verification"
         },{
             onError(ctx) {
-              otp.setError("code", {
-                type:"custom",
-                message: `${ctx.error.message}`
-              })      
+                setOtpError(ctx.error.message);
               return;
             },
         })
 
         await authClient.emailOtp.verifyEmail({
             email: email,
-            otp: input.code,
+            otp: otp,
         }, {
             onError(ctx) {
-              otp.setError("code", {
-                type:"custom",
-                message: `${ctx.error.message}`
-              })      
+              setOtpError(ctx.error.message);
               return;
             },
         })
@@ -141,35 +132,29 @@ export function SignUpForm(){
                     <h1 className="text-2xl font-semibold text-gray-900">Verify Your Email</h1>
                 </div>
                 <div className="text-base align-center w-full">
-                    <form id="form-otp" onSubmit={otp.handleSubmit(otpSumbit)}>
+                    <form id="form-otp" onSubmit={otpSumbit}>
                         <FieldGroup>
-                            <Controller
-                                name="code"
-                                control={otp.control}
-                                render={({field, fieldState}) => (
-                                    
-                                    <Field data-invalid={fieldState.invalid}>
-                                        <FieldLabel htmlFor="form-otp-code">Verification Code</FieldLabel>
-                                        <InputOTP value={field.value} onChange={(value) => field.onChange(value)} onBlur={field.onBlur} aria-invalid={fieldState.invalid} maxLength={6} id="form-otp-code" pattern={REGEXP_ONLY_DIGITS} required>
-                                            <InputOTPGroup>
-                                                <InputOTPSlot index={0} />
-                                                <InputOTPSlot index={1} />
-                                                <InputOTPSlot index={2} />
-                                            </InputOTPGroup>
-                                            <InputOTPSeparator />
-                                            <InputOTPGroup>
-                                                <InputOTPSlot index={3}/>
-                                                <InputOTPSlot index={4}/>
-                                                <InputOTPSlot index={5}/>
-                                            </InputOTPGroup>
-                                        </InputOTP>
-                                        {fieldState.invalid && (
-                                            <FieldError errors={[fieldState.error]} />
-                                        )}  
-                                        <FieldDescription>The code that was sent to your email</FieldDescription>                  
-                                    </Field>
-                                )}
+                            <Field>
+                                <label htmlFor="form-otp-enter">Enter your code</label>
+                                <InputOTP maxLength={6} pattern={REGEXP_ONLY_DIGITS} value={otp} onChange={setOtp} aria-invalid={otpError.length != 0} id="form-otp-enter"> 
+                                <InputOTPGroup>
+                                    <InputOTPSlot index={1}/>
+                                    <InputOTPSlot index={2}/>
+                                    <InputOTPSlot index={3}/>
+                                </InputOTPGroup>
+                                <InputOTPSeparator />
+                                <InputOTPGroup>
+                                    <InputOTPSlot index={4}/>
+                                    <InputOTPSlot index={5}/>
+                                    <InputOTPSlot index={6}/>
+                                </InputOTPGroup>
+                            </InputOTP>
+                            <FieldError
+                                errors={otpError ? [{ message: otpError }] : []}
                             />
+                            </Field>
+                            <FieldDescription>Enter the code that was sent to your email.</FieldDescription>
+                            
                         </FieldGroup>
                     </form>
                     <Field orientation={"vertical"} className="p-2">

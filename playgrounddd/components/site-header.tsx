@@ -13,7 +13,7 @@ export function SiteHeader() {
           className="mx-2 data-[orientation=vertical]:h-4"
         />
         
-        <AutoBreadcrumbs rootLabel="Home" rootHref="/home"/>
+        <AutoBreadcrumbs rootLabel="" rootHref="/home"/>
 
         <div className="ml-auto flex items-center gap-2">
           <ThemeToggle />
