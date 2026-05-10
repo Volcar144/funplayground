@@ -138,15 +138,15 @@ export function SignUpForm(){
                                 <label htmlFor="form-otp-enter">Enter your code</label>
                                 <InputOTP maxLength={6} pattern={REGEXP_ONLY_DIGITS} value={otp} onChange={setOtp} aria-invalid={otpError.length != 0} id="form-otp-enter"> 
                                 <InputOTPGroup>
+                                    <InputOTPSlot index={0}/>
                                     <InputOTPSlot index={1}/>
                                     <InputOTPSlot index={2}/>
-                                    <InputOTPSlot index={3}/>
                                 </InputOTPGroup>
                                 <InputOTPSeparator />
                                 <InputOTPGroup>
+                                    <InputOTPSlot index={3}/>
                                     <InputOTPSlot index={4}/>
                                     <InputOTPSlot index={5}/>
-                                    <InputOTPSlot index={6}/>
                                 </InputOTPGroup>
                             </InputOTP>
                             <FieldError
