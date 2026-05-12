@@ -20,13 +20,13 @@ export default function ForgotPasswordPage(){
     return (
         <main>
             <div className="min-h-screen w-full max-w overflow-hidden">
-                <Image className="bg-img" alt="bg-img" src="splash.png"/>
+                <Image className="bg-img" alt="bg-img" src="splash1.png"/>
                 <div className="flex flex-grid gap-2 text-white p-4">
                     <Image src="logo.svg" height={48} width={48} alt="logo" />
                     <p className="text-2xl">Playgrounddd</p>
                 </div>
                 <div className="flex flex-col gap-4 align-center items-center h-screen w-full justify-center font-sans">
-                    <Card className="bg-black rounded-sm text-white w-1/5">
+                    <Card className="bg-black rounded-sm text-white w-1/5 opacity-70">
                         <CardHeader>
                             <CardTitle className="text-xl">Verify your email</CardTitle>
                         </CardHeader>
@@ -50,10 +50,14 @@ export default function ForgotPasswordPage(){
                                 </FieldGroup>
                             </form>
                         </CardContent>
-                        <CardFooter >
-                            <Field orientation="horizontal" className="w-full rounded-none">
-                                <Button className="color-green">Continue</Button>
-                            </Field>
+                        <CardFooter className="color-black">
+                            <div className="flex flex-col rounded-none gap-2 w-full">
+                                <Button className="w-full bg-green-500 focus:bg-green-400">Confirm</Button>
+                                <Button className="w-full bg-grey-500 focus:bg-grey-200">
+                                    <RotateCcw />
+                                    Resend code
+                                </Button>
+                            </div>
                         </CardFooter>
                     </Card>
                 </div>
