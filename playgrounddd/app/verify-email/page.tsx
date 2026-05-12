@@ -20,7 +20,7 @@ export default function ForgotPasswordPage(){
     return (
         <main>
             <div className="min-h-screen w-full max-w overflow-hidden">
-                <Image className="bg-img" alt="bg-img" src="splash1.png"/>
+                <Image className="bg-img" alt="bg-img" src="splash1.jpg"/>
                 <div className="flex flex-grid gap-2 text-white p-4">
                     <Image src="logo.svg" height={48} width={48} alt="logo" />
                     <p className="text-2xl">Playgrounddd</p>
